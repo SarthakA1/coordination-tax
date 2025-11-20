@@ -96,8 +96,6 @@
             gap: 8px;
             white-space: nowrap;
             box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            opacity: 0;
-            transition: opacity 0.2s;
         }
         .notif-pill span { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
         .notif-pill.tax span { background: var(--marker-red); box-shadow: 0 0 8px var(--marker-red); }
@@ -963,11 +961,12 @@
 
         let particles = [];
         class NotifParticle {
-            constructor() {
+            constructor(index, total) {
                 this.element = document.createElement('div');
                 this.element.className = 'notif-pill tax';
                 this.x = Math.random() * window.innerWidth;
-                this.y = Math.random() * window.innerHeight; // Start distributed across entire viewport
+                // Bias distribution toward top and middle of viewport for immediate visibility
+                this.y = (Math.random() * window.innerHeight * 1.5) - (window.innerHeight * 0.2);
                 this.speed = 1 + Math.random() * 2;
                 this.textIndex = Math.floor(Math.random() * taxTexts.length);
                 this.element.innerHTML = `<span></span> ${taxTexts[this.textIndex]}`;
@@ -1000,7 +999,8 @@
                 this.element.style.top = `${this.y}px`;
             }
         }
-        for (let i = 0; i < (window.innerWidth < 768 ? 15 : 35); i++) particles.push(new NotifParticle());
+        const totalParticles = window.innerWidth < 768 ? 15 : 35;
+        for (let i = 0; i < totalParticles; i++) particles.push(new NotifParticle(i, totalParticles));
         function animateStream() { particles.forEach(p => p.update()); requestAnimationFrame(animateStream); }
         animateStream();
 
