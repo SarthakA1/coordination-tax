@@ -97,7 +97,7 @@
             white-space: nowrap;
             box-shadow: 0 4px 12px rgba(0,0,0,0.08);
             opacity: 0;
-            transition: opacity 0.5s;
+            transition: opacity 0.2s;
         }
         .notif-pill span { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
         .notif-pill.tax span { background: var(--marker-red); box-shadow: 0 0 8px var(--marker-red); }
@@ -973,6 +973,7 @@
                 this.element.innerHTML = `<span></span> ${taxTexts[this.textIndex]}`;
                 this.element.style.left = `${this.x}px`;
                 this.element.style.transform = `scale(${0.6 + Math.random() * 0.5})`;
+                this.element.style.opacity = 0.3 + Math.random() * 0.4;
                 streamContainer.appendChild(this.element);
             }
             update() {
