@@ -967,11 +967,12 @@
                 this.element = document.createElement('div');
                 this.element.className = 'notif-pill tax';
                 this.x = Math.random() * window.innerWidth;
-                this.y = window.innerHeight + Math.random() * 200;
+                this.y = Math.random() * window.innerHeight; // Start distributed across entire viewport
                 this.speed = 1 + Math.random() * 2;
                 this.textIndex = Math.floor(Math.random() * taxTexts.length);
                 this.element.innerHTML = `<span></span> ${taxTexts[this.textIndex]}`;
                 this.element.style.left = `${this.x}px`;
+                this.element.style.top = `${this.y}px`; // Set initial position
                 this.element.style.transform = `scale(${0.6 + Math.random() * 0.5})`;
                 this.element.style.opacity = 0.3 + Math.random() * 0.4;
                 streamContainer.appendChild(this.element);
