@@ -589,7 +589,89 @@
             .twin-avatar { display: none; }
         }
 
+        /* --- CUSTOM CURSOR & MOUSE EFFECTS --- */
+        body {
+            cursor: none;
+        }
+
+        .custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--marker-blue);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transition: all 0.15s ease;
+            mix-blend-mode: difference;
+            transform: translate(-50%, -50%);
+        }
+
+        .cursor-dot {
+            position: fixed;
+            width: 6px;
+            height: 6px;
+            background: var(--marker-red);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 10px var(--marker-red-glow);
+        }
+
+        .cursor-trail {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: var(--marker-blue);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            opacity: 0;
+            animation: trail-fade 0.6s ease-out forwards;
+        }
+
+        @keyframes trail-fade {
+            0% { opacity: 0.8; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.3); }
+        }
+
+        .click-ripple {
+            position: fixed;
+            border: 2px solid var(--marker-blue);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9997;
+            animation: ripple-expand 0.8s ease-out forwards;
+            transform: translate(-50%, -50%);
+        }
+
+        @keyframes ripple-expand {
+            0% { width: 10px; height: 10px; opacity: 1; }
+            100% { width: 80px; height: 80px; opacity: 0; }
+        }
+
+        /* Hover states for interactive elements */
+        a, button, .data-trigger, .cta-button {
+            cursor: none;
+        }
+
+        body.hovering .custom-cursor {
+            width: 40px;
+            height: 40px;
+            border-color: var(--marker-red);
+            background: rgba(220, 38, 38, 0.1);
+        }
+
+        body.clicking .custom-cursor {
+            transform: translate(-50%, -50%) scale(0.8);
+        }
+
         @media (max-width: 768px) {
+            /* Disable custom cursor on mobile/touch devices */
+            body { cursor: auto; }
+            .custom-cursor, .cursor-dot, .cursor-trail, .click-ripple { display: none; }
+
             /* Layout adjustments */
             .stat-grid { grid-template-columns: 1fr; gap: 2rem; }
             .stat-divider { display: none; }
@@ -680,6 +762,10 @@
     <div class="progress-bar" id="progress-bar"></div>
     <div id="notification-stream"></div>
     <canvas id="bg-canvas"></canvas>
+
+    <!-- Custom Cursor Elements -->
+    <div class="custom-cursor"></div>
+    <div class="cursor-dot"></div>
 
     <section>
         <div class="container">
@@ -1122,6 +1208,95 @@
                     card.style.transform = `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
                 }
             });
+        });
+
+        // --- CUSTOM CURSOR SYSTEM ---
+        const cursor = document.querySelector('.custom-cursor');
+        const cursorDot = document.querySelector('.cursor-dot');
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+        let dotX = 0, dotY = 0;
+        let trailTimer = 0;
+
+        // Update mouse position
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+
+            // Create particle trail effect (throttled)
+            trailTimer++;
+            if (trailTimer % 3 === 0) {
+                createTrail(e.clientX, e.clientY);
+            }
+        });
+
+        // Smooth cursor follow animation
+        function animateCursor() {
+            // Cursor ring follows with slight delay
+            cursorX += (mouseX - cursorX) * 0.15;
+            cursorY += (mouseY - cursorY) * 0.15;
+            cursor.style.left = cursorX + 'px';
+            cursor.style.top = cursorY + 'px';
+
+            // Cursor dot follows closely
+            dotX += (mouseX - dotX) * 0.25;
+            dotY += (mouseY - dotY) * 0.25;
+            cursorDot.style.left = dotX + 'px';
+            cursorDot.style.top = dotY + 'px';
+
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // Create particle trail
+        function createTrail(x, y) {
+            const trail = document.createElement('div');
+            trail.className = 'cursor-trail';
+            trail.style.left = x + 'px';
+            trail.style.top = y + 'px';
+            document.body.appendChild(trail);
+            setTimeout(() => trail.remove(), 600);
+        }
+
+        // Click ripple effect
+        document.addEventListener('mousedown', (e) => {
+            document.body.classList.add('clicking');
+            createRipple(e.clientX, e.clientY);
+        });
+
+        document.addEventListener('mouseup', () => {
+            document.body.classList.remove('clicking');
+        });
+
+        function createRipple(x, y) {
+            const ripple = document.createElement('div');
+            ripple.className = 'click-ripple';
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+            document.body.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 800);
+        }
+
+        // Hover detection for interactive elements
+        const interactiveElements = document.querySelectorAll('a, button, .data-trigger, .cta-button, .notif-pill');
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                document.body.classList.add('hovering');
+            });
+            el.addEventListener('mouseleave', () => {
+                document.body.classList.remove('hovering');
+            });
+        });
+
+        // Hide cursor when leaving window
+        document.addEventListener('mouseleave', () => {
+            cursor.style.opacity = '0';
+            cursorDot.style.opacity = '0';
+        });
+
+        document.addEventListener('mouseenter', () => {
+            cursor.style.opacity = '1';
+            cursorDot.style.opacity = '1';
         });
     </script>
     <script>
