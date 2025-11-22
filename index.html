@@ -1054,7 +1054,7 @@
                 this.element.style.top = `${this.y}px`;
             }
         }
-        const totalParticles = window.innerWidth < 768 ? 15 : 35;
+        const totalParticles = window.innerWidth < 768 ? 8 : 18;
         for (let i = 0; i < totalParticles; i++) particles.push(new NotifParticle(i, totalParticles));
         function animateStream() { particles.forEach(p => p.update()); requestAnimationFrame(animateStream); }
         animateStream();
