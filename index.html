@@ -990,27 +990,10 @@
                 line-height: 1.15;
             }
 
-            /* Highlight keywords in hero on mobile - stroke style like desktop */
+            /* Use the same SVG highlight as desktop */
             #hero-section h1 .hl-wrap {
-                display: inline-block;
-                background: transparent;
-                padding: 0;
-                margin: 0;
-                border: none;
-                border-radius: 0;
                 position: relative;
-            }
-
-            #hero-section h1 .hl-wrap::after {
-                content: '';
-                position: absolute;
-                bottom: -2px;
-                left: 0;
-                right: 0;
-                height: 8px;
-                background: rgba(251, 191, 36, 0.3);
-                border-radius: 2px;
-                z-index: -1;
+                display: inline-block;
             }
 
             h2 {
@@ -1290,13 +1273,19 @@
                 margin-top: 1.5rem;
             }
 
-            /* Annotations - hide complex ones */
-            .annotation-svg {
+            /* Annotations - hide complex ones but keep highlights */
+            .annotation-svg:not(.highlight) {
                 display: none;
+            }
+
+            /* Keep highlight SVG visible and adjust size */
+            .annotation-svg.highlight {
+                display: block;
             }
 
             .hl-wrap {
                 white-space: normal;
+                position: relative;
             }
         }
 
@@ -1315,19 +1304,6 @@
                 line-height: 1.15;
             }
 
-            #hero-section h1 .hl-wrap {
-                display: inline-block;
-                margin: 0;
-                padding: 0;
-                background: transparent;
-                border: none;
-                position: relative;
-            }
-
-            #hero-section h1 .hl-wrap::after {
-                height: 6px;
-                bottom: -1px;
-            }
 
             h2 {
                 font-size: 1.5rem !important;
