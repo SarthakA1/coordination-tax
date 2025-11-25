@@ -1,451 +1,231 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>The Coordination Tax: Reclaiming Billions in Lost Time</title>
-    <meta name="description" content="57% of work time spent coordinating, not creating. Discover how autonomous agents can reclaim billions in lost productivity."/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Virtual Twins | Coordination for Everyone</title>
+    <meta name="description"
+        content="Deploy autonomous Virtual Twins for every employee to handle coordination in Slack & Calendar." />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,600;1,600&family=Reenie+Beanie&family=Fira+Code:wght@300;500&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Fira+Code:wght@400;500;600&family=Reenie+Beanie&display=swap"
+        rel="stylesheet">
 
     <style>
         :root {
-            --bg: #ffffff;
-            --glass-bg: rgba(0, 0, 0, 0.02);
-            --glass-border: rgba(0, 0, 0, 0.08);
-            --text: #0a0a0a;
-            --text-mute: #666;
-            --text-dim: #999;
-
-            /* Enhanced color palette */
-            --marker-red: #dc2626;
-            --marker-red-glow: rgba(220, 38, 38, 0.3);
-            --marker-yellow: #fbbf24;
-            --marker-blue: #0284c7;
-            --marker-blue-glow: rgba(2, 132, 199, 0.3);
-
+            --bg: #fdfbf7;
+            /* Warm paper white */
+            --text: #0f172a;
+            --text-mute: #64748b;
+            --brand-blue: #3b82f6;
+            /* More vibrant, modern blue */
+            --brand-red: #ef4444;
+            --brand-dark: #1e293b;
             --ease-lux: cubic-bezier(0.16, 1, 0.3, 1);
-            --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --shadow-soft: 0 20px 40px -5px rgba(0, 0, 0, 0.05);
         }
 
-        /* Smooth scroll behavior */
         html {
             scroll-behavior: smooth;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
             background-color: var(--bg);
+            background-image: radial-gradient(circle at 50% 0%, #fff 0%, transparent 70%);
             color: var(--text);
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
             line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* Progress indicator */
-        .progress-bar {
+        /* --- BACKGROUND --- */
+        #bg-canvas {
             position: fixed;
             top: 0;
             left: 0;
-            width: 0%;
-            height: 3px;
-            background: linear-gradient(90deg, var(--marker-red), var(--marker-blue));
-            z-index: 1000;
-            transition: width 0.1s ease;
-            box-shadow: 0 0 10px var(--marker-red-glow);
-        }
-
-        /* --- BACKGROUND LAYERS --- */
-        .grain {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIj48ZmlsdGVyIGlkPSJub2lzZSI+PGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9IjAuOCIgb5IiLz48L2ZpbHRlcj4PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsdGVyPSJ1cmwoI25vaXNlKSIgb3BhY2l0eT0iMC4wNSIvPjwvc3ZnPg==');
-            pointer-events: none;
-            z-index: 999;
-            opacity: 0.15;
-        }
-
-        #bg-canvas {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100vh;
+            width: 100%;
+            height: 100vh;
             z-index: 0;
-        }
-
-        /* --- NOTIFICATION STREAM --- */
-        #notification-stream {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 1;
+            opacity: 0.5;
             pointer-events: none;
-            perspective: 1000px;
         }
-        .notif-pill {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(4px);
-            border: 1px solid rgba(0,0,0,0.08);
-            padding: 0.5rem 1rem;
-            border-radius: 50px;
-            color: var(--text-mute);
-            font-size: 0.75rem;
-            font-family: 'Inter', sans-serif;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            white-space: nowrap;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-        }
-        .notif-pill span { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
-        .notif-pill.tax span { background: var(--marker-red); box-shadow: 0 0 8px var(--marker-red); }
-        .notif-pill.resolved span { background: var(--marker-blue); box-shadow: 0 0 8px var(--marker-blue); }
 
-        /* --- TYPOGRAPHY & LAYOUT --- */
+        /* --- LAYOUT --- */
         section {
-            min-height: 90vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 6rem 2rem;
+            padding: 5rem 1.5rem;
             position: relative;
             z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .container {
-            max-width: 850px;
+            max-width: 950px;
             width: 100%;
             position: relative;
         }
 
+        /* --- FLOATING ICONS --- */
+        .hero-scene {
+            position: relative;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .float-wrapper {
+            position: absolute;
+            z-index: 1;
+            pointer-events: none;
+            will-change: transform;
+            transition: transform 0.1s linear;
+        }
+
+        .app-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 14px;
+            box-shadow: var(--shadow-soft), 0 8px 16px rgba(0, 0, 0, 0.02);
+            animation: bob 5s ease-in-out infinite;
+            transition: transform 0.3s var(--ease-lux);
+        }
+
+        .app-icon:hover {
+            transform: scale(1.05);
+        }
+
+        .app-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .fw-1 {
+            top: 40px;
+            left: -120px;
+            animation-delay: 0s;
+            z-index: 1;
+        }
+
+        .fw-2 {
+            top: 120px;
+            right: -100px;
+            animation-delay: 1.2s;
+            z-index: 2;
+        }
+
+        .fw-3 {
+            bottom: 20px;
+            left: -80px;
+            animation-delay: 2.4s;
+            z-index: 3;
+        }
+
+        .fw-4 {
+            top: 20px;
+            right: -20px;
+            animation-delay: 0.8s;
+            z-index: 0;
+            transform: scale(0.9);
+            opacity: 0.8;
+        }
+
+        .fw-5 {
+            bottom: -20px;
+            right: -120px;
+            animation-delay: 3.0s;
+            z-index: 1;
+        }
+
+        .fw-6 {
+            top: 220px;
+            left: -140px;
+            animation-delay: 1.8s;
+            z-index: 0;
+            transform: scale(0.9);
+            opacity: 0.8;
+        }
+
+        @keyframes bob {
+
+            0%,
+            100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-15px) rotate(2deg);
+            }
+        }
+
+        /* --- TYPOGRAPHY --- */
         h1 {
             font-family: 'Playfair Display', serif;
-            font-size: clamp(2.8rem, 6vw, 5.5rem);
-            line-height: 1.25;
-            margin-bottom: 2rem;
-            padding-bottom: 0.5rem;
-            font-weight: 600;
+            font-size: clamp(2.8rem, 5vw, 4.8rem);
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            color: var(--brand-dark);
             letter-spacing: -0.02em;
-            background: linear-gradient(135deg, #0a0a0a 0%, #404040 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            position: relative;
+            z-index: 2;
         }
 
         h2 {
             font-family: 'Playfair Display', serif;
-            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-size: clamp(2rem, 4vw, 3rem);
             line-height: 1.2;
-            margin-bottom: 1.5rem;
-            font-weight: 600;
-        }
-
-        h3 {
-            font-family: 'Inter', sans-serif;
-            font-size: clamp(1.3rem, 2.5vw, 1.8rem);
-            line-height: 1.3;
             margin-bottom: 1rem;
-            font-weight: 600;
-            letter-spacing: -0.01em;
-        }
-
-        p {
-            font-size: clamp(1.15rem, 2vw, 1.5rem);
-            color: var(--text-mute);
-            line-height: 1.7;
-            max-width: 720px;
-            margin-bottom: 1.5rem;
-            font-weight: 300;
+            color: var(--brand-dark);
         }
 
         p.lead {
-            font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+            font-size: clamp(1.2rem, 2vw, 1.4rem);
             color: var(--text);
-            line-height: 1.6;
             font-weight: 400;
-        }
-
-        /* --- GLASS CARDS --- */
-        .glass-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 3rem;
+            max-width: 720px;
+            margin-bottom: 2rem;
             position: relative;
-            transform-style: preserve-3d;
-            box-shadow:
-                0 8px 24px rgba(0,0,0,0.06),
-                0 0 0 1px rgba(0,0,0,0.02) inset;
-            margin: 3rem 0;
-            transition: all 0.6s var(--ease-lux);
+            z-index: 2;
         }
-
-        .glass-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            border-radius: 24px;
-            padding: 1px;
-            background: linear-gradient(135deg, rgba(0,0,0,0.06), rgba(0,0,0,0.02));
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.6s ease;
-        }
-
-        .glass-card:hover::before {
-            opacity: 1;
-        }
-
-        /* --- Enhanced DATA TOOLTIPS --- */
-        .data-trigger {
-            color: var(--text);
-            border-bottom: 2px dotted var(--text-mute);
-            cursor: help;
-            position: relative;
-            transition: all 0.3s var(--ease-lux);
-            font-weight: 500;
-        }
-        .data-trigger:hover {
-            color: var(--marker-red);
-            border-bottom-color: var(--marker-red);
-            text-shadow: 0 0 20px var(--marker-red-glow);
-        }
-
-        .tooltip {
-            position: absolute;
-            bottom: 130%; left: 50%;
-            transform: translateX(-50%) translateY(10px) scale(0.9);
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(250, 250, 250, 0.98));
-            backdrop-filter: blur(12px);
-            border: 1.5px solid var(--marker-red);
-            padding: 15px 18px;
-            border-radius: 12px;
-            min-width: 240px;
-            font-family: 'Fira Code', monospace;
-            font-size: 0.75rem;
-            color: var(--text);
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.4s var(--ease-lux);
-            box-shadow:
-                0 0 20px var(--marker-red-glow),
-                0 4px 16px rgba(0,0,0,0.12),
-                0 0 0 1px rgba(220,38,38,0.1) inset;
-            z-index: 100;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        .tooltip::after {
-            content: '';
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            margin-left: -6px;
-            border-width: 6px;
-            border-style: solid;
-            border-color: var(--marker-red) transparent transparent transparent;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
-        }
-        .data-trigger:hover .tooltip {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0) scale(1);
-        }
-        .tt-label {
-            color: var(--text-mute);
-            text-transform: uppercase;
-            font-size: 0.65rem;
-            letter-spacing: 0.05em;
-            font-weight: 600;
-        }
-        .tt-val {
-            color: var(--marker-red);
-            font-size: 1.1rem;
-            font-weight: bold;
-            text-shadow: 0 0 10px var(--marker-red-glow);
-        }
-
-        /* --- Enhanced STATS GRID --- */
-        .stats-card {
-            background: linear-gradient(145deg, rgba(255,250,250,0.8), rgba(255,245,245,0.9));
-            border-color: rgba(220, 38, 38, 0.2);
-            box-shadow:
-                0 0 40px rgba(220, 38, 38, 0.1),
-                0 8px 24px rgba(0,0,0,0.06),
-                0 0 0 1px rgba(220,38,38,0.08) inset;
-            position: relative;
-            overflow: hidden;
-        }
-        .stats-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background:
-                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="none"/><path d="M0 50L50 0M50 100L100 50" stroke="%23ff4d4d" stroke-opacity="0.15" stroke-width="1.5"/></svg>'),
-                radial-gradient(circle at 20% 50%, rgba(255,77,77,0.1) 0%, transparent 50%);
-            background-size: 30px 30px, 100% 100%;
-            opacity: 0.4;
-            z-index: 0;
-            animation: bg-pan 40s linear infinite;
-        }
-        .stats-card::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,77,77,0.05) 0%, transparent 70%);
-            animation: pulse-glow 8s ease-in-out infinite;
-            pointer-events: none;
-            z-index: 0;
-        }
-        @keyframes bg-pan {
-            from { background-position: 0% 0%, 0% 0%; }
-            to { background-position: 100% 100%, 0% 0%; }
-        }
-        @keyframes pulse-glow {
-            0%, 100% { opacity: 0.3; transform: scale(1); }
-            50% { opacity: 0.6; transform: scale(1.1); }
-        }
-
-        .stat-grid {
-            display: grid;
-            grid-template-columns: 1fr 1px 1fr;
-            gap: 2rem;
-            margin-top: 1rem;
-            align-items: center;
-            text-align: center;
-            position: relative;
-        }
-        .stat-divider { width: 1px; height: 100%; background: rgba(255,255,255,0.1); }
-
-        .stat-box h2 {
-            font-family: 'Fira Code', monospace;
-            font-size: clamp(3.5rem, 8vw, 6rem);
-            line-height: 1;
-            margin: 0;
-            letter-spacing: -3px;
-            font-weight: 700;
-            position: relative;
-            z-index: 1;
-        }
-        .stat-box.red h2 {
-            color: var(--marker-red);
-            text-shadow:
-                0 0 40px var(--marker-red-glow),
-                0 0 80px rgba(255, 77, 77, 0.2);
-            animation: pulse-number 3s ease-in-out infinite;
-        }
-        .stat-box.blue h2 {
-            color: var(--text-dim);
-            opacity: 0.4;
-        }
-        @keyframes pulse-number {
-            0%, 100% { text-shadow: 0 0 30px var(--marker-red-glow), 0 0 60px rgba(255, 77, 77, 0.15); }
-            50% { text-shadow: 0 0 50px var(--marker-red-glow), 0 0 100px rgba(255, 77, 77, 0.25); }
-        }
-
-        .stat-label {
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-top: 1rem;
-            font-weight: 600;
-        }
-        .stat-sub { font-size: 0.8rem; color: var(--text-mute); font-family: 'Fira Code', monospace; margin-top: 5px; }
-
-        .resource-bar-container {
-            width: 100%; height: 6px; background: rgba(255,255,255,0.1);
-            margin-top: 2rem; border-radius: 3px; overflow: hidden; display: flex;
-        }
-        .rb-red { height: 100%; background: var(--marker-red); width: 0%; transition: width 2s ease-out; }
-        .rb-blue { height: 100%; background: #333; width: 0%; transition: width 2s ease-out; }
-
-        .active .rb-red { width: 57%; }
-        .active .rb-blue { width: 43%; }
-
-        .stat-quote {
-            margin-top: 2rem;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            font-family: 'Playfair Display', serif;
-            font-size: 1.4rem;
-            line-height: 1.4;
-            font-style: italic;
-            text-align: center;
-        }
-
-        .system-overload-text {
-            color: var(--marker-red);
-            text-shadow: 0 0 10px rgba(255, 77, 77, 0.5);
-            animation: pulse-red 2s infinite alternate;
-        }
-        @keyframes pulse-red {
-            from { text-shadow: 0 0 5px rgba(255, 77, 77, 0.3); }
-            to { text-shadow: 0 0 20px rgba(255, 77, 77, 0.8); }
-        }
-
-        /* --- NEW FEATURE: TERMINAL (USE CASE CONSOLE) --- */
-        .terminal-window {
-            background: #f8f8f8;
-            border: 1px solid rgba(0,0,0,0.1);
-            border-radius: 12px;
-            overflow: hidden;
-            font-family: 'Fira Code', monospace;
-            font-size: 0.9rem;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-            width: 100%;
-        }
-        .terminal-header {
-            background: rgba(0,0,0,0.03);
-            padding: 8px 15px;
-            display: flex;
-            gap: 8px;
-        }
-        .dot { width: 10px; height: 10px; border-radius: 50%; }
-        .dot.r { background: #ff5f56; } .dot.y { background: #ffbd2e; } .dot.g { background: #27c93f; }
-
-        .terminal-body { padding: 20px; color: #555; min-height: 180px; position: relative; }
-        .cursor { display: inline-block; width: 8px; height: 15px; background: var(--marker-blue); animation: blink 1s infinite; }
-        @keyframes blink { 50% { opacity: 0; } }
-
-        .log-entry { margin-bottom: 10px; opacity: 0; animation: fadeIn 0.3s forwards; line-height: 1.5; }
-        .log-entry.highlight {
-            background: rgba(2, 132, 199, 0.08);
-            padding: 8px;
-            border-left: 2px solid var(--marker-blue);
-            margin-top: 8px;
-        }
-        @keyframes fadeIn { to { opacity: 1; } }
-        .log-time { color: #999; margin-right: 10px; font-size: 0.8rem; }
-        .log-agent { color: var(--marker-blue); }
-        .log-human { color: var(--marker-red); font-weight: 500; }
 
         /* --- ANNOTATIONS --- */
         .hand-note {
             font-family: 'Reenie Beanie', cursive;
-            font-size: 1.8rem;
-            color: var(--marker-red);
+            font-size: 1.6rem;
+            color: var(--brand-blue);
             position: absolute;
             transform: rotate(-5deg);
             opacity: 0;
             transition: opacity 0.8s ease 0.5s;
             pointer-events: none;
-            white-space: nowrap;
             z-index: 20;
+            white-space: nowrap;
         }
-        .hand-note.blue { color: var(--marker-blue); }
-        .hand-note.active { opacity: 1; }
+
+        .hand-note.red {
+            color: var(--brand-red);
+        }
+
+        .hand-note.active {
+            opacity: 1;
+        }
 
         .annotation-svg {
             position: absolute;
@@ -458,270 +238,1078 @@
             transition: stroke-dashoffset 1.5s ease-out;
             z-index: -1;
         }
-        .draw-active .annotation-svg { stroke-dashoffset: 0; }
-        .highlight { stroke: rgba(251, 191, 36, 0.3); stroke-width: 16px; }
-        .red-pen { stroke: var(--marker-red); stroke-width: 2px; }
-        .blue-pen { stroke: var(--marker-blue); stroke-width: 2px; }
 
-        /* --- ANIMATIONS --- */
-        .reveal {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: all 1.2s var(--ease-lux);
-        }
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
+        .draw-active .annotation-svg {
+            stroke-dashoffset: 0;
         }
 
-        .cta-button {
-            margin-top: 3rem;
-            padding: 1.5rem 3.5rem;
-            background: var(--marker-blue);
-            border: 2px solid var(--marker-blue);
-            color: #ffffff;
-            font-family: 'Inter', sans-serif;
-            font-weight: 600;
-            font-size: 0.95rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            cursor: pointer;
-            transition: all 0.5s var(--ease-lux);
-            position: relative;
-            overflow: hidden;
-            border-radius: 8px;
+        .highlight {
+            stroke: rgba(251, 191, 36, 0.4);
+            stroke-width: 14px;
         }
-        .cta-button::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s ease, height 0.6s ease;
+
+        .red-pen {
+            stroke: var(--brand-red);
+            stroke-width: 2px;
         }
-        .cta-button:hover {
-            background: #0369a1;
-            box-shadow:
-                0 4px 16px var(--marker-blue-glow),
-                0 8px 24px rgba(0,0,0,0.12);
-            transform: translateY(-2px);
-            border-color: #0369a1;
-        }
-        .cta-button:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-        .cta-button:active {
-            transform: translateY(0);
+
+        .blue-pen {
+            stroke: var(--brand-blue);
+            stroke-width: 1.5px;
         }
 
         .hl-wrap {
             position: relative;
             display: inline-block;
-            -webkit-text-fill-color: #0a0a0a;
-            color: #0a0a0a;
+            white-space: nowrap;
         }
 
-        /* Virtual Twin Profile Images */
-        .twin-avatar {
-            position: absolute;
-            width: 80px;
-            height: 80px;
+        /* --- HERO --- */
+        #hero-section {
+            min-height: 100vh;
+            justify-content: center;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+
+        .tagline {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            color: var(--brand-blue);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+            display: inline-block;
+            background: rgba(0, 0, 0, 0.04);
+            padding: 4px 12px;
+            border-radius: 4px;
+        }
+
+        /* --- STAT CARD --- */
+        .stat-card {
+            background: linear-gradient(145deg, #fffafa, #fff5f5);
+            border: 1px solid rgba(239, 68, 68, 0.15);
+            border-radius: 16px;
+            padding: 3rem;
+            margin-top: 2rem;
+            position: relative;
+            box-shadow: 0 10px 30px -10px rgba(239, 68, 68, 0.1);
+        }
+
+        .big-stat {
+            font-family: 'Fira Code', monospace;
+            font-size: clamp(4rem, 8vw, 6rem);
+            line-height: 1;
+            font-weight: 700;
+            color: var(--brand-red);
+            letter-spacing: -3px;
+            margin-bottom: 0.5rem;
+        }
+
+        /* --- TERMINAL --- */
+        .terminal-layout {
+            display: grid;
+            grid-template-columns: 1.8fr 1fr;
+            gap: 2rem;
+            margin-top: 1.5rem;
+            align-items: start;
+        }
+
+        .terminal-window {
+            background: #1e293b;
+            border-radius: 10px;
+            overflow: hidden;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            position: relative;
+            height: 280px;
+        }
+
+        .terminal-header {
+            background: #0f172a;
+            padding: 10px 15px;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
             border-radius: 50%;
-            border: 2px solid var(--marker-blue);
-            background: linear-gradient(135deg, rgba(2, 132, 199, 0.1), rgba(14, 165, 233, 0.05));
-            box-shadow:
-                0 0 20px var(--marker-blue-glow),
-                0 4px 16px rgba(0,0,0,0.08),
-                0 0 0 1px rgba(2, 132, 199, 0.1) inset;
-            backdrop-filter: blur(10px);
+        }
+
+        .dot.r {
+            background: #ff5f56;
+        }
+
+        .dot.y {
+            background: #ffbd2e;
+        }
+
+        .dot.g {
+            background: #27c93f;
+        }
+
+        .terminal-body {
+            padding: 20px;
+            color: #e2e8f0;
+            height: 100%;
+            overflow-y: hidden;
+        }
+
+        .log-entry {
+            margin-bottom: 12px;
+            opacity: 0;
+            animation: fadeIn 0.3s forwards;
+            display: flex;
+        }
+
+        .log-time {
+            color: #64748b;
+            margin-right: 12px;
+            min-width: 70px;
+            font-size: 0.75rem;
+            padding-top: 2px;
+        }
+
+        .log-content {
+            flex: 1;
+            line-height: 1.5;
+        }
+
+        .log-agent {
+            color: #60a5fa;
+        }
+
+        .log-human {
+            color: #e2e8f0;
+            border-left: 2px solid #94a3b8;
+            padding-left: 10px;
+        }
+
+        .log-success {
+            color: #34d399;
+            font-weight: 500;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 16px;
+            background: #60a5fa;
+            animation: blink 1s infinite;
+            vertical-align: middle;
+        }
+
+        .summary-panel {
+            background: #ffffff;
+            border: 1px solid var(--brand-blue);
+            border-radius: 12px;
+            padding: 1.5rem;
+            position: relative;
+            height: 100%;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.08);
+        }
+
+        .summary-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--text-mute);
+            letter-spacing: 1px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .summary-content {
+            font-family: 'Fira Code', monospace;
+            font-size: 1.1rem;
+            color: var(--brand-dark);
+            font-weight: 500;
+            line-height: 1.4;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.5s ease;
+        }
+
+        .summary-content.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .summary-highlight {
+            color: var(--brand-blue);
+            font-weight: 700;
+            display: block;
+            margin-top: 8px;
+            font-size: 0.9rem;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* --- CTA BUTTON --- */
+        .cta-button {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 1rem 2.5rem;
+            background: var(--brand-blue);
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+            position: relative;
+            z-index: 2;
+        }
+
+        .cta-button:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+        }
+
+        /* --- FEATURE GRID --- */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 5rem;
+            width: 100%;
+            position: relative;
+        }
+
+        .grid-arrow {
+            position: absolute;
+            top: 50%;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        .arrow-1 {
+            left: 28%;
+            transform: translateY(-50%) rotate(-5deg);
+            width: 100px;
+        }
+
+        .arrow-2 {
+            right: 28%;
+            transform: translateY(-50%) rotate(5deg) scaleX(-1);
+            width: 100px;
+        }
+
+        .feature-note {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 1.4rem;
+            color: var(--brand-blue);
+            position: absolute;
+            z-index: 20;
+            transform: rotate(-5deg);
+            white-space: nowrap;
+        }
+
+        .note-1 {
+            top: -35px;
+            left: 10%;
+            transform: rotate(-3deg);
+            color: var(--brand-red);
+        }
+
+        .note-2 {
+            bottom: -40px;
+            right: 15%;
+            transform: rotate(3deg);
+        }
+
+        .note-3 {
+            top: -35px;
+            right: 10%;
+            transform: rotate(2deg);
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 24px;
+            padding: 2.5rem 2rem 2rem 2rem;
+            transition: all 0.4s var(--ease-lux);
+            position: relative;
+            overflow: visible;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+            margin-top: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 280px;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px -12px rgba(37, 99, 235, 0.15);
+            background: rgba(255, 255, 255, 0.9);
+            border-color: #fff;
+        }
+
+        .feature-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--brand-dark);
+            font-weight: 700;
+        }
+
+        .feature-desc {
+            font-size: 1rem;
+            color: var(--text-mute);
+            line-height: 1.7;
+        }
+
+        .feature-desc strong {
+            color: var(--brand-blue);
+            font-weight: 600;
+        }
+
+        /* ========================================== */
+        /* SIMULATOR SECTION STYLES                   */
+        /* ========================================== */
+        #sim-section {
+            padding: 4rem 1.5rem;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(59, 130, 246, 0.03) 100%);
+        }
+
+        .sim-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        /* CONTROL PANEL */
+        .sim-controls {
+            position: sticky;
+            top: 2rem;
+        }
+
+        /* Hide scroll hint on desktop */
+        .sim-container::before {
+            display: none;
+        }
+
+        .role-btn {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            width: 100%;
+            background: white;
+            border: 1px solid #e2e8f0;
+            padding: 1.25rem;
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            text-align: left;
+            position: relative;
+        }
+
+        .role-btn:hover {
+            border-color: var(--brand-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.08);
+        }
+
+        .role-btn.active {
+            border-color: var(--brand-blue);
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.02), rgba(59, 130, 246, 0.05));
+            box-shadow: 0 4px 16px rgba(59, 130, 246, 0.12);
+        }
+
+        .role-btn.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--brand-blue);
+            border-radius: 8px 0 0 8px;
+        }
+
+        .role-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 6px;
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            border: 1px solid #e2e8f0;
             display: flex;
             align-items: center;
             justify-content: center;
             font-family: 'Fira Code', monospace;
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: var(--marker-blue);
-            opacity: 0;
-            transition: all 0.8s var(--ease-lux);
-            animation: float 6s ease-in-out infinite;
-        }
-        .twin-avatar::before {
-            content: '';
-            position: absolute;
-            inset: -3px;
-            border-radius: 50%;
-            padding: 3px;
-            background: linear-gradient(135deg, var(--marker-blue), rgba(0, 212, 255, 0.3));
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            opacity: 0;
-            transition: opacity 0.6s ease;
-        }
-        .twin-avatar:hover::before {
-            opacity: 1;
-        }
-        .twin-avatar.active {
-            opacity: 1;
-        }
-        .twin-avatar.left-1 { top: 10%; left: -120px; animation-delay: 0s; }
-        .twin-avatar.left-2 { top: 50%; left: -100px; animation-delay: 1.5s; }
-        .twin-avatar.left-3 { top: 80%; left: -130px; animation-delay: 3s; }
-        .twin-avatar.right-1 { top: 20%; right: -120px; animation-delay: 0.8s; }
-        .twin-avatar.right-2 { top: 55%; right: -110px; animation-delay: 2.2s; }
-        .twin-avatar.right-3 { top: 85%; right: -125px; animation-delay: 3.5s; }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
+            font-size: 0.7rem;
+            color: var(--brand-dark);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.25s ease;
         }
 
-        .twin-section-wrapper {
+        .role-btn.active .role-avatar {
+            background: linear-gradient(135deg, var(--brand-blue), #2563eb);
+            color: white;
+            border-color: var(--brand-blue);
+        }
+
+        .role-info h4 {
+            font-size: 0.95rem;
+            color: var(--brand-dark);
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .role-info span {
+            font-size: 0.75rem;
+            color: var(--text-mute);
+            font-family: 'Fira Code', monospace;
+        }
+
+        /* CHAT INTERFACE */
+        .chat-window {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 550px;
             position: relative;
         }
 
-        @media (max-width: 1200px) {
-            .twin-avatar { display: none; }
+        .chat-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fafafa;
         }
 
-        @media (max-width: 768px) {
+        .channel-name {
+            font-weight: 600;
+            color: var(--brand-dark);
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-            /* Layout adjustments */
-            .stat-grid { grid-template-columns: 1fr; gap: 2rem; }
-            .stat-divider { display: none; }
-            section { padding: 3rem 1.25rem; min-height: 70vh; }
+        .channel-name::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--brand-blue);
+            display: inline-block;
+        }
 
-            /* Glass cards */
-            .glass-card {
-                padding: 1.5rem;
-                margin: 2rem 0;
-                border-radius: 16px;
+        .chat-body {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .msg {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            position: relative;
+            animation: popIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        @keyframes popIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
-            .stats-card { padding: 1.5rem; }
+        }
+
+        .msg-sender {
+            font-size: 0.75rem;
+            margin-bottom: 4px;
+            font-weight: 600;
+            display: block;
+        }
+
+        .msg.incoming {
+            background: white;
+            border: 1px solid #e2e8f0;
+            align-self: flex-start;
+            border-bottom-left-radius: 2px;
+            color: var(--brand-dark);
+        }
+
+        .msg.outgoing {
+            background: var(--brand-blue);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 2px;
+        }
+
+        .msg.twin {
+            background: linear-gradient(135deg, #f8fafc, #eff6ff);
+            border: 1px solid #dbeafe;
+            border-left: 3px solid var(--brand-blue);
+            align-self: flex-start;
+            width: 100%;
+            max-width: 90%;
+        }
+
+        .twin-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: transparent;
+            padding: 0;
+            border-radius: 0;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--brand-blue);
+            margin-bottom: 6px;
+            font-family: 'Fira Code', monospace;
+            letter-spacing: 0.3px;
+            border: none;
+        }
+
+        .twin-badge::before {
+            content: '◆';
+            color: var(--brand-blue);
+            font-size: 0.6rem;
+        }
+
+        .chat-input-area {
+            padding: 1rem 1.5rem;
+            background: white;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .fake-input {
+            width: 100%;
+            height: 44px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            color: #94a3b8;
+            font-size: 0.9rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .fake-input.typing {
+            color: var(--brand-dark);
+        }
+
+        .prompt-overlay {
+            position: absolute;
+            bottom: 80px;
+            left: 0;
+            width: 100%;
+            padding: 0 1.5rem;
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            background: linear-gradient(0deg, #f8fafc 40%, rgba(248, 250, 252, 0));
+        }
+
+        .action-chip {
+            background: white;
+            color: var(--brand-dark);
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            white-space: nowrap;
+            cursor: pointer;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+            transition: all 0.2s ease;
+            animation: floatUp 0.5s ease 0.2s forwards;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        @keyframes floatUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .action-chip:hover {
+            transform: translateY(-2px);
+            border-color: var(--brand-blue);
+            box-shadow: 0 4px 8px rgba(59, 130, 246, 0.15);
+        }
+
+        .impact-toast {
+            position: absolute;
+            top: 70px;
+            right: 20px;
+            background: white;
+            border: 1px solid var(--brand-blue);
+            color: var(--brand-dark);
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            font-family: 'Fira Code', monospace;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+            transform: translateX(120%);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 100;
+        }
+
+        .impact-toast::before {
+            content: '→';
+            color: var(--brand-blue);
+            font-weight: 700;
+        }
+
+        .impact-toast.show {
+            transform: translateX(0);
+        }
+
+        /* --- MOBILE --- */
+        @media (max-width: 900px) {
+
+            /* Hide decorative elements */
+            .grid-arrow,
+            .feature-note,
+            .blue-pen,
+            .float-wrapper {
+                display: none !important;
+            }
+
+            /* Section spacing */
+            section {
+                padding: 3rem 1.25rem;
+            }
+
+            #hero-section {
+                min-height: auto;
+                padding: 4rem 1.25rem;
+            }
+
+            /* Container */
+            .container {
+                max-width: 100%;
+                padding: 0;
+            }
 
             /* Typography */
             h1 {
-                font-size: 2.2rem !important;
+                font-size: 2.25rem !important;
                 line-height: 1.2;
                 margin-bottom: 1.5rem;
             }
-            h2 { font-size: 1.8rem !important; }
-            h3 { font-size: 1.3rem !important; }
-            p { font-size: 1.05rem !important; }
-            p.lead { font-size: 1.2rem !important; }
 
-            /* Stats */
-            .stat-box h2 { font-size: 2.8rem !important; }
-            .stat-label { font-size: 0.7rem; letter-spacing: 1px; }
-            .stat-sub { font-size: 0.75rem; }
-            .stat-quote { font-size: 1.1rem !important; margin-top: 1.5rem; }
-
-            /* Terminal */
-            .terminal-window { font-size: 0.75rem; }
-            .terminal-body { padding: 15px; min-height: 150px; }
-            .log-entry { font-size: 0.75rem; margin-bottom: 8px; }
-
-            /* Tooltips */
-            .tooltip {
-                position: fixed;
-                bottom: 20px;
-                left: 50%;
-                top: auto;
-                transform: translateX(-50%);
-                min-width: 280px;
-                max-width: 90vw;
+            #hero-section h1 {
+                font-size: 2.5rem !important;
             }
-            .tooltip::after { display: none; }
 
-            /* Hand notes */
+            h2 {
+                font-size: 1.75rem !important;
+                line-height: 1.3;
+            }
+
+            p.lead {
+                font-size: 1.1rem !important;
+                line-height: 1.5;
+            }
+
+            p {
+                font-size: 1rem !important;
+            }
+
+            .tagline {
+                font-size: 0.7rem;
+            }
+
+            /* Hide hand notes in hero on mobile */
+            #hero-section .hand-note {
+                display: none !important;
+            }
+
+            /* Stat card */
+            .stat-card {
+                padding: 1.5rem;
+                margin-top: 1rem;
+            }
+
+            .stat-card h2 {
+                font-size: 1.5rem !important;
+                margin-bottom: 1.5rem;
+            }
+
+            .stat-card > div[style*="grid-template-columns"] {
+                grid-template-columns: 1fr !important;
+                gap: 1.25rem !important;
+            }
+
+            .big-stat {
+                font-size: 3rem !important;
+            }
+
+            /* Hand notes - make relative on mobile */
             .hand-note {
-                font-size: 1.2rem;
-                position: relative;
+                position: relative !important;
+                display: block !important;
                 top: auto !important;
                 left: auto !important;
                 right: auto !important;
                 bottom: auto !important;
                 margin: 1rem 0;
-                display: block;
+                font-size: 1.2rem !important;
+                transform: rotate(0deg) !important;
             }
 
-            /* CTA Button */
-            .cta-button {
-                padding: 1rem 2rem;
-                font-size: 0.8rem;
-                letter-spacing: 1.5px;
+            /* Feature grid */
+            .feature-grid {
+                grid-template-columns: 1fr;
                 margin-top: 2rem;
+                gap: 1.5rem;
             }
 
-            /* Bottom stats grid */
-            .stats-bottom-grid {
-                grid-template-columns: 1fr !important;
-                gap: 2.5rem !important;
-                margin-top: 3rem !important;
-                padding: 0 1rem;
+            .feature-card {
+                padding: 1.75rem 1.5rem;
+                min-height: auto;
+                margin-top: 0;
             }
-            .stats-bottom-grid > div > div:first-child {
+
+            .feature-title {
+                font-size: 1.3rem;
+                margin-top: 1rem;
+            }
+
+            .feature-desc {
+                font-size: 0.95rem;
+            }
+
+            /* Terminal layout */
+            .terminal-layout {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .terminal-window {
+                height: 240px;
+                font-size: 0.75rem;
+            }
+
+            .summary-panel {
+                min-height: 150px;
+                padding: 1.25rem;
+            }
+
+            .summary-content {
+                font-size: 0.95rem;
+            }
+
+            /* Simulation section */
+            .sim-container {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .sim-controls {
+                position: relative;
+                top: 0;
+                display: flex;
+                overflow-x: auto;
+                gap: 0.75rem;
+                padding: 0.5rem 1.5rem 1rem 1.5rem;
+                margin: 0 -1.25rem 1rem -1.25rem;
+                scroll-behavior: smooth;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .sim-controls::before,
+            .sim-controls::after {
+                content: '→';
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                font-size: 1.5rem;
+                color: var(--brand-blue);
+                font-weight: 700;
+                pointer-events: none;
+                z-index: 10;
+                animation: pulse-arrow 2s ease-in-out infinite;
+                background: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,0.95));
+                padding: 1rem 0.5rem;
+            }
+
+            .sim-controls::before {
+                content: '←';
+                left: 0;
+                background: linear-gradient(to left, rgba(255,255,255,0), rgba(255,255,255,0.95));
+            }
+
+            .sim-controls::after {
+                right: 0;
+                background: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,0.95));
+            }
+
+            @keyframes pulse-arrow {
+                0%, 100% {
+                    opacity: 0.4;
+                }
+                50% {
+                    opacity: 1;
+                }
+            }
+
+            .role-btn {
+                min-width: 200px;
+                flex-shrink: 0;
+                margin-bottom: 0;
+                padding: 1rem;
+            }
+
+            .role-avatar {
+                width: 36px;
+                height: 36px;
+                font-size: 0.65rem;
+            }
+
+            .role-info h4 {
+                font-size: 0.9rem;
+            }
+
+            .role-info span {
+                font-size: 0.7rem;
+            }
+
+            /* Add scroll hint on mobile */
+            .sim-container::before {
+                content: '← Swipe to see different roles →';
+                display: block;
+                text-align: center;
+                font-size: 0.75rem;
+                color: var(--text-mute);
+                font-family: 'Fira Code', monospace;
+                margin-bottom: 0.5rem;
+                opacity: 0.7;
+            }
+
+            /* Chat window */
+            .chat-window {
+                height: 480px;
+            }
+
+            .chat-header {
+                padding: 0.875rem 1rem;
+            }
+
+            .channel-name {
+                font-size: 0.8rem;
+            }
+
+            .chat-body {
+                padding: 1rem;
+            }
+
+            .msg {
+                max-width: 85%;
+                font-size: 0.9rem;
+                padding: 10px 12px;
+            }
+
+            .twin-badge {
+                font-size: 0.65rem;
+            }
+
+            /* Impact toast */
+            .impact-toast {
+                position: static;
+                margin: 1rem;
+                transform: none !important;
+                width: calc(100% - 2rem);
+            }
+
+            .impact-toast.show {
+                transform: none !important;
+            }
+
+            /* Action chips */
+            .prompt-overlay {
+                bottom: 70px;
+                padding: 0 1rem;
+                flex-wrap: wrap;
+            }
+
+            .action-chip {
+                font-size: 0.75rem;
+                padding: 7px 12px;
+            }
+
+            .chat-input-area {
+                padding: 0.875rem 1rem;
+            }
+
+            .fake-input {
+                height: 40px;
+                font-size: 0.85rem;
+            }
+
+            /* CTA button */
+            .cta-button {
+                padding: 0.875rem 2rem;
+                font-size: 0.9rem;
+                margin-top: 1.5rem;
+            }
+
+            /* Annotations - hide complex ones */
+            .annotation-svg {
+                display: none;
+            }
+
+            .hl-wrap {
+                white-space: normal;
+            }
+        }
+
+        /* Extra small screens */
+        @media (max-width: 480px) {
+            section {
+                padding: 2.5rem 1rem;
+            }
+
+            h1 {
+                font-size: 2rem !important;
+            }
+
+            #hero-section h1 {
+                font-size: 2.25rem !important;
+            }
+
+            h2 {
+                font-size: 1.5rem !important;
+            }
+
+            .stat-card {
+                padding: 1.25rem;
+            }
+
+            .big-stat {
                 font-size: 2.5rem !important;
             }
 
-            /* Reduce notification count on mobile */
-            .notif-pill { font-size: 0.7rem; padding: 0.4rem 0.8rem; }
-        }
+            .role-btn {
+                min-width: 180px;
+            }
 
+            .chat-window {
+                height: 420px;
+            }
+
+            .sim-controls::before,
+            .sim-controls::after {
+                font-size: 1.2rem;
+            }
+        }
     </style>
 </head>
+
 <body>
 
-    <div class="grain"></div>
-    <div class="progress-bar" id="progress-bar"></div>
-    <div id="notification-stream"></div>
     <canvas id="bg-canvas"></canvas>
 
-    <section>
-        <div class="container">
-            <div class="reveal">
-                <p class="lead">In every organization, a silent thief operates in plain sight.</p>
-                <h1>The <span class="hl-wrap">Coordination Tax<svg class="annotation-svg highlight" viewBox="0 0 200 60" style="top:0; left:-10px; width:120%; height:100%;"><path d="M5,30 Q100,10 190,35" /></svg></span> is stealing your company's most valuable asset: time.</h1>
-
-                <p style="margin-top: 2.5rem;">Every day, billions of dollars evaporate in <span class="data-trigger">coordination overhead
-                    <div class="tooltip">
-                        <div class="tt-label">Hidden Cost per Meeting Hour</div>
-                        <div class="tt-val">$3,200+</div>
-                        <div class="tt-label" style="margin-top:8px;">Annual Productivity Drain</div>
-                        <div class="tt-val">$32M+</div>
-                        <div style="margin-top:8px; padding-top:8px; border-top:1px solid rgba(255,255,255,0.1); color:var(--text-mute); font-size:0.7rem;">Per 1,000 knowledge workers</div>
-                    </div>
-                </span>—meetings that defer decisions, status updates that create confusion, and synchronous handoffs that block progress. This is 10x worse for organizations that operate across time zones.</p>
-
-                <p>While your teams align, coordinate, and synchronize, the work that matters waits in an endless queue.</p>
-
-                <div class="glass-card" style="border-color: rgba(255, 77, 77, 0.2);">
-                    <div class="hand-note" style="top: -35px; right: -20px; transform: rotate(5deg);">Pure noise.</div>
-                    <div style="font-family: 'Fira Code', monospace; font-size: 0.9rem; color: var(--text-mute);">
-                        <div style="margin-bottom:12px; color: var(--text); font-weight: 600; display: flex; align-items: center; gap: 8px;">
-                            <span style="width: 8px; height: 8px; background: var(--marker-red); border-radius: 50%; box-shadow: 0 0 8px var(--marker-red);"></span>
-                            Slack Thread — #project-alpha
-                        </div>
-                        <div style="padding:15px; border-left: 3px solid var(--marker-red); background: rgba(220,38,38,0.08); border-radius: 4px;">
-                            <div style="color: var(--text); margin-bottom: 8px;">
-                                <span style="color: var(--marker-red); font-weight: 600;">@channel</span> Has anyone seen the updated spec? We need a decision ASAP.
-                            </div>
-                            <div style="color: var(--text-dim); font-size: 0.75rem; line-height: 1.6;">
-                                📊 18 replies • 🔔 3 teams pinged • ⏱️ Last reply 1 min ago<br>
-                                💬 Thread still active • ⚠️ No resolution
-                            </div>
-                        </div>
-                        <div style="margin-top:15px; padding: 12px; background: rgba(251,191,36,0.1); border-radius: 6px; border-left: 3px solid var(--marker-yellow);">
-                            <div style="color: var(--text); font-weight: 600; margin-bottom: 4px; font-size: 0.8rem;">ACTUAL OUTCOME:</div>
-                            <div style="color: var(--marker-red); font-size: 0.85rem;">Nothing decided. Two engineers context-switched. One new blocker created. Decision still pending.</div>
-                        </div>
-                    </div>
+    <section id="hero-section" style="text-align: center;">
+        <div class="container hero-scene">
+            <div class="float-wrapper fw-1" data-speed="2">
+                <div class="app-icon"><img src="https://cdn.simpleicons.org/slack/3b82f6" alt="Slack"></div>
+            </div>
+            <div class="float-wrapper fw-2" data-speed="-1.5">
+                <div class="app-icon"><img src="https://cdn.simpleicons.org/googlecalendar/3b82f6" alt="Calendar"></div>
+            </div>
+            <div class="float-wrapper fw-3" data-speed="1">
+                <div class="app-icon" style="display: flex; align-items: center; justify-content: center;">
+                    <svg viewBox="0 0 24 24" fill="#3b82f6" xmlns="http://www.w3.org/2000/svg"
+                        style="width:100%; height:100%">
+                        <path
+                            d="M22.5 12.5C22.5 13.3284 21.8284 14 21 14H18V10H21C21.8284 10 22.5 10.6716 22.5 11.5V12.5Z" />
+                        <path d="M16 8H13V16H16C16.5523 16 17 15.5523 17 15V9C17 8.44772 16.5523 8 16 8Z" />
+                        <path
+                            d="M3 7C2.44772 7 2 7.44772 2 8V16C2 16.5523 2.44772 17 3 17H11C11.5523 17 12 16.5523 12 16V8C12 7.44772 11.5523 7 11 7H3Z" />
+                    </svg>
                 </div>
+            </div>
+            <div class="float-wrapper fw-4" data-speed="-0.8">
+                <div class="app-icon"><img src="https://cdn.simpleicons.org/jira/3b82f6" alt="Jira"></div>
+            </div>
+            <div class="float-wrapper fw-5" data-speed="1.2">
+                <div class="app-icon"><img src="https://cdn.simpleicons.org/asana/3b82f6" alt="Asana"></div>
+            </div>
+            <div class="float-wrapper fw-6" data-speed="-1.5">
+                <div class="app-icon"><img src="https://cdn.simpleicons.org/linear/3b82f6" alt="Linear"></div>
+            </div>
+
+            <div class="reveal">
+                <div class="tagline">For Every Team Member</div>
+                <h1>Deploy <span class="hl-wrap">autonomous Virtual Twins<svg class="annotation-svg highlight"
+                            viewBox="0 0 400 60" style="top:5px; left:-5px; width:110%; height:100%;">
+                            <path d="M5,40 Q200,10 390,45" />
+                        </svg></span> to handle coordination.</h1>
+                <div class="hand-note" style="top: 10px; right: 5%; transform: rotate(5deg);">Runs 24/7</div>
+                <p class="lead" style="margin-left: auto; margin-right: auto; position: relative;">
+                    <span class="hl-wrap">Meetings, questions, and approvals;<svg class="annotation-svg highlight"
+                            viewBox="0 0 400 60" style="top:3px; left:-5px; width:110%; height:100%;">
+                            <path d="M5,40 Q200,10 390,45" />
+                        </svg></span> all handled automatically. Your team focuses on real work. Critical context stays
+                    visible, not buried in <span class="hl-wrap">private DMs<svg class="annotation-svg highlight"
+                            viewBox="0 0 200 60"
+                            style="top:5px; left:-5px; width:110%; height:100%; stroke: var(--brand-red); opacity: 0.4;">
+                            <path d="M5,45 Q100,55 190,40" stroke-width="3" fill="none" />
+                        </svg></span>.
+                    <span class="hand-note"
+                        style="position: absolute; top: -20px; right: -40px; transform: rotate(10deg); color: var(--brand-blue); font-size: 1.4rem;">It
+                        answers for you.</span>
+                </p>
             </div>
         </div>
     </section>
@@ -729,406 +1317,533 @@
     <section>
         <div class="container">
             <div class="reveal">
-                <h1>How the Tax Compounds</h1>
-                <p class="lead" style="margin-bottom: 3rem;">Every new hire brings talent—and exponential coordination overhead.</p>
+                <div class="hand-note red" style="top: -30px; left: 0; transform: rotate(-3deg);">The Problem</div>
+                <div class="stat-card">
+                    <h2 style="font-size: 2.2rem; margin-bottom: 2rem; color: var(--brand-dark); line-height: 1.3;">
+                        Modern workplaces are <span class="hl-wrap">structurally inefficient<svg
+                                class="annotation-svg highlight" viewBox="0 0 400 60"
+                                style="top:3px; left:-5px; width:110%; height:100%;">
+                                <path d="M5,40 Q200,10 390,45" />
+                            </svg></span>
+                    </h2>
+                    <!-- Two stat boxes side by side -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+                        <!-- 57% stat -->
+                        <div
+                            style="background: rgba(239, 68, 68, 0.08); padding: 2rem; border-radius: 12px; position: relative;">
+                            <div class="big-stat" style="font-size: 4.5rem; margin-bottom: 0.5rem;">57%</div>
+                            <div style="font-size: 0.95rem; color: #475569; font-weight: 500; line-height: 1.5;">
+                                of work time spent on coordination*
+                            </div>
+                            <div style="margin-top: 1rem; font-size: 0.7rem; color: #94a3b8;">
+                                *Microsoft Work Trend Index, 2024
+                            </div>
+                        </div>
 
-                <div style="position: relative;">
-                    <p>Each person added weaves a denser <span class="hl-wrap">coordination web<svg class="annotation-svg red-pen" viewBox="0 0 250 60" style="top:0; left:0; width:100%; height:100%;"><path d="M0,50 Q125,0 250,50" /></svg></span>: more calendars to sync, more Slack threads to track, more approval chains to navigate.</p>
+                        <!-- $25k stat -->
+                        <div
+                            style="background: rgba(239, 68, 68, 0.08); padding: 2rem; border-radius: 12px; position: relative;">
+                            <div class="big-stat" style="font-size: 4.5rem; margin-bottom: 0.5rem;">$25k</div>
+                            <div
+                                style="font-size: 0.95rem; color: #475569; font-weight: 500; line-height: 1.5; position: relative;">
+                                wasted annually on coordination <strong
+                                    style="color: var(--brand-red); font-size: 1.05rem;">per employee</strong>**
+                                <span class="hand-note red"
+                                    style="position: relative; display: inline-block; margin-left: 8px; transform: rotate(3deg); font-size: 1.3rem; top: 0;">←
+                                    ouch!</span>
+                            </div>
+                            <div style="margin-top: 1rem; font-size: 0.7rem; color: #94a3b8;">
+                                **Harvard Business Review, 2023
+                            </div>
+                        </div>
+                    </div>
 
-                    <p>Teams fragment into silos. Managers hoard resources and headcount. Critical context evaporates in private DMs and forgotten Notion docs.</p>
+                    <div style="width: 100%; height: 1px; background: rgba(239,68,68,0.15); margin: 2rem 0;"></div>
 
-                    <p>Engineers context-switch between twelve conversations. Product roadmaps stall waiting for approvals from people who don't even know they're blockers.</p>
-
-                    <div class="hand-note" style="right: 0; top: 80px;">Death by a thousand handoffs.</div>
-                </div>
-
-                <div class="glass-card" style="margin-top: 1rem;">
-                    <h3 style="font-weight: 400; margin-bottom: 1rem; color: var(--text);">Project Status: <span style="color: var(--marker-red);">STALLED</span></h3>
-                    <p style="font-size: 1rem; margin-bottom: 0;">
-                        Waiting for: <span style="font-family:'Fira Code'; background:rgba(0,0,0,0.05); padding:2px 6px; border-radius:4px;">Human Approval</span><br>
-                        Cause: <span style="text-decoration: underline; text-decoration-color: var(--marker-red);">Critical signal lost in DMs • owner unknown</span>
-                    </p>
-                    <svg class="annotation-svg red-pen" style="position: absolute; top: 40px; right: 50px; width: 60px; height: 60px;" viewBox="0 0 60 60">
-                        <path d="M50,10 L10,50 M10,50 L30,50 M10,50 L10,30" />
+                    <!-- What this means -->
+                    <div style="margin-bottom: 1.5rem;">
+                        <p style="font-size: 1.2rem; color: #1e293b; font-weight: 600; margin-bottom: 0.8rem;">
+                            What this means:
+                        </p>
+                        <p style="font-size: 1.05rem; color: #475569; line-height: 1.8; margin-bottom: 0.8rem;">
+                            → Critical work is <span class="hl-wrap">delayed by manual synchronization<svg
+                                    class="annotation-svg highlight" viewBox="0 0 400 60"
+                                    style="top:3px; left:-5px; width:110%; height:100%;">
+                                    <path d="M5,40 Q200,10 390,45" />
+                                </svg></span>
+                        </p>
+                        <p style="font-size: 1.05rem; color: #475569; line-height: 1.8; margin-bottom: 0.8rem;">
+                            → Context isn't available when you need it (especially across time zones)
+                        </p>
+                        <p style="font-size: 1.05rem; color: #475569; line-height: 1.8;">
+                            → Teams spend time on admin noise, not creative output
+                        </p>
+                    </div>
+                    <div class="hand-note"
+                        style="position: relative; display: inline-block; margin-top: 1.5rem; transform: rotate(-2deg); font-size: 1.8rem;">
+                        You hired builders. You got routers. ←</div>
+                    <svg class="annotation-svg red-pen"
+                        style="position: absolute; right: -40px; top: 40px; width: 60px; height: 60px;"
+                        viewBox="0 0 60 60">
+                        <path d="M10,10 Q50,30 30,50 L35,45 M30,50 L25,40" />
                     </svg>
                 </div>
             </div>
         </div>
     </section>
 
-    <section>
+    <section class="twin-section" style="background: rgba(248, 250, 252, 0.8); padding: 3rem 1.5rem;">
         <div class="container">
             <div class="reveal">
-                <p class="lead">The data doesn't lie. Microsoft analyzed millions of workers and found something shocking:</p>
-                <h1>57% of Work Time is <span class="hl-wrap">Coordination<svg class="annotation-svg highlight" viewBox="0 0 300 60" style="top:0; left:-10px; width:110%; height:100%; stroke:rgba(255, 77, 77, 0.25);"><path d="M5,30 C50,10 250,10 295,30" /></svg></span>, Not Creation</h1>
-                <p style="margin-top: 2rem;">Your company isn't hiring engineers to engineer, designers to design, or strategists to strategize. You're hiring <em>human routers</em>—expensive processors burning cycles on coordination instead of creation.</p>
+                <h2>How Twins Operate</h2>
+                <p style="color: var(--text-mute); margin-bottom: 2rem; font-size: 1rem;">Watch how autonomous Virtual
+                    Twins resolve coordination holdups in real-time.</p>
 
-                <div class="glass-card stats-card">
-                    <div style="display:flex; justify-content:space-between; margin-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
-                        <span style="font-family: 'Fira Code'; font-size: 0.7rem; color: var(--text-mute);">WORK_TREND_INDEX_DATA</span>
-                        <span class="system-overload-text" style="font-family: 'Fira Code'; font-size: 0.7rem;">SYSTEM_OVERLOAD</span>
-                    </div>
-
-                    <div class="stat-grid">
-                        <div class="stat-box red">
-                            <h2 class="counter" data-target="57">0</h2>
-                            <div class="stat-label" style="color: var(--marker-red);">Time Spent Communicating</div>
-                            <div class="stat-sub">Meetings • Email • Chat</div>
-                        </div>
-
-                        <div class="stat-divider"></div>
-
-                        <div class="stat-box blue">
-                            <h2 class="counter" data-target="43">0</h2>
-                            <div class="stat-label">Time Spent Creating</div>
-                            <div class="stat-sub">Documents • Spreadsheets • Code</div>
-                        </div>
-                    </div>
-
-                    <div class="resource-bar-container">
-                        <div class="rb-red"></div>
-                        <div class="rb-blue"></div>
-                    </div>
-
-                    <div class="stat-quote">
-                        "More than half of every workday is spent coordinating, not creating. This isn't a people problem—it's an architecture problem. And architecture problems have solutions."
-                    </div>
-                    <div style="margin-top:1.5rem; text-align:center; font-size:0.85rem; color:var(--text-dim); font-family:'Inter';">
-                        Source: Microsoft Work Trend Index, 2024
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <section>
-        <div class="container">
-            <div class="reveal">
-                <p class="lead">This isn't a people problem. Your team isn't lazy or inefficient.</p>
-                <h1>It's an <span class="hl-wrap">Architecture Problem<svg class="annotation-svg highlight" viewBox="0 0 200 50" style="top:0; left:-5%; width:110%; height:100%;"><path d="M0,30 Q100,10 200,35" /></svg></span></h1>
-                <p style="margin-top: 2rem;">Organizations were designed in an era when humans <em>had to be</em> the routers, the context-switchers, the living middleware between systems and decisions.</p>
-                <p>We turned brilliant engineers into Slack forwarders. Product managers into meeting schedulers. Executives into email triagers.</p>
-
-                <div style="margin-top: 3rem; padding: 2rem; background: rgba(251,191,36,0.08); border-left: 3px solid var(--marker-yellow); border-radius: 8px;">
-                    <p style="font-size: 1.25rem; font-style: italic; color: var(--text); margin: 0;">
-                        The question isn't "Who should make this decision?"<br>
-                        The question is: <strong style="color: var(--marker-blue);">"Why does a human need to route this at all?"</strong>
-                    </p>
-                </div>
-
-                <div class="hand-note" style="bottom: -30px; right: 10%; transform: rotate(3deg);">Rethink the system.</div>
-            </div>
-        </div>
-    </section>
-
-    <section>
-        <div class="container twin-section-wrapper">
-            <!-- Floating Twin Avatars -->
-            <div class="twin-avatar left-1">A</div>
-            <div class="twin-avatar left-2">S</div>
-            <div class="twin-avatar left-3">M</div>
-            <div class="twin-avatar right-1">J</div>
-            <div class="twin-avatar right-2">K</div>
-            <div class="twin-avatar right-3">R</div>
-
-            <div class="reveal">
-                <p class="lead">We believe that a new medium of coordination is upon us.</p>
-                <h1>Introducing <span class="hl-wrap">Virtual Twins</span>. For Every Team Member.</h1>
-                <p style="margin-top: 2rem;">Imagine persistent AI agents that handle the coordination layer—intercepting interruptions, negotiating calendars, routing requests, and resolving blockers <em>before</em> they reach human consciousness.</p>
-                <p>Your virtual twin works 24/7, learning your preferences, understanding context, and making the 1,000 micro-decisions that used to fragment your day.</p>
-
-                <div class="glass-card" style="border-color: rgba(2, 132, 199, 0.2); background: rgba(248, 250, 252, 0.5); padding: 0;">
+                <div class="terminal-layout">
                     <div class="terminal-window">
                         <div class="terminal-header">
-                            <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
-                            <div style="margin-left: auto; color: #555; font-size: 0.7rem;">AGENT_INTERCEPT_PROTOCOL_V2</div>
+                            <div class="dot r"></div>
+                            <div class="dot y"></div>
+                            <div class="dot g"></div>
                         </div>
-                        <div class="terminal-body" id="terminal-output">
-                            <span class="cursor"></span>
-                        </div>
+                        <div class="terminal-body" id="terminal-output"><span class="cursor"></span></div>
                     </div>
-                    <div class="hand-note blue" style="top: -25px; left: 20px; transform: rotate(-3deg);">Live Use Cases</div>
+                    <div class="summary-panel">
+                        <div class="summary-label">Current Action Result</div>
+                        <div id="summary-text" class="summary-content">Waiting for active protocol...</div>
+                        <svg class="annotation-svg blue-pen"
+                            style="position: absolute; left: -40px; top: 50%; width: 40px; height: 40px;"
+                            viewBox="0 0 40 40">
+                            <path d="M0,20 Q20,20 35,20 L30,15 M35,20 L30,25" />
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="feature-grid">
+                    <div class="feature-note note-1">No more context switching</div>
+                    <div class="feature-note note-2">Syncs instantly -></div>
+                    <div class="feature-note note-3">Automated.</div>
+                    <svg class="grid-arrow arrow-1" viewBox="0 0 100 30" fill="none" stroke="var(--brand-blue)"
+                        stroke-width="2" stroke-dasharray="5,5">
+                        <path d="M0,15 Q50,0 95,15" marker-end="url(#arrowhead)" />
+                    </svg>
+                    <svg class="grid-arrow arrow-2" viewBox="0 0 100 30" fill="none" stroke="var(--brand-blue)"
+                        stroke-width="2" stroke-dasharray="5,5">
+                        <path d="M0,15 Q50,30 95,15" marker-end="url(#arrowhead)" />
+                    </svg>
+                    <svg style="position: absolute; width: 0; height: 0; overflow: hidden;">
+                        <defs>
+                            <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                <polygon points="0 0, 10 3.5, 0 7" fill="var(--brand-blue)" />
+                            </marker>
+                        </defs>
+                    </svg>
+
+                    <div class="feature-card">
+                        <svg class="annotation-svg"
+                            style="position: absolute; top: 10px; left: 10px; width: 40px; height: 40px; transform: rotate(-10deg);"
+                            viewBox="0 0 50 50">
+                            <circle cx="25" cy="25" r="20" fill="none" stroke="var(--brand-blue)" stroke-width="2"
+                                stroke-dasharray="60 100" />
+                        </svg>
+                        <h3 class="feature-title">For Makers</h3>
+                        <p class="feature-desc"><strong>The Interceptor:</strong> Auto-answers routine questions using
+                            your docs and history, protecting your flow state.</p>
+                        <div class="hand-note"
+                            style="font-size: 1rem; margin-top: 1.5rem; color: var(--brand-blue); transform: rotate(-2deg); position: relative; display: inline-block;">
+                            "Saved me 2h today"</div>
+                    </div>
+
+                    <div class="feature-card">
+                        <svg class="annotation-svg"
+                            style="position: absolute; bottom: 10px; right: 10px; width: 50px; height: 30px;"
+                            viewBox="0 0 100 60">
+                            <path d="M10,30 Q50,60 90,30" fill="none" stroke="var(--brand-red)" stroke-width="2" />
+                        </svg>
+                        <h3 class="feature-title">For Everyone</h3>
+                        <p class="feature-desc"><strong>The Negotiator:</strong> "Find time for us." Your twin talks to
+                            their twin (or email) to book slots automatically.</p>
+                        <div class="hand-note"
+                            style="font-size: 1rem; margin-top: 1.5rem; color: var(--brand-red); transform: rotate(2deg); position: relative; display: inline-block;">
+                            No more email ping-pong</div>
+                    </div>
+
+                    <div class="feature-card">
+                        <svg class="annotation-svg"
+                            style="position: absolute; top: 20px; right: 20px; width: 30px; height: 30px;"
+                            viewBox="0 0 40 40">
+                            <path d="M10,10 L30,30 M30,10 L10,30" fill="none" stroke="#059669" stroke-width="3"
+                                stroke-linecap="round" />
+                        </svg>
+                        <h3 class="feature-title">For Leaders</h3>
+                        <p class="feature-desc"><strong>The Aggregator:</strong> Ask "What did we ship?" It pulls data
+                            from Github/Linear/Slack to generate an instant report.</p>
+                        <div class="hand-note"
+                            style="font-size: 1rem; margin-top: 1.5rem; color: #059669; transform: rotate(-1deg); position: relative; display: inline-block;">
+                            Instant visibility</div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section style="min-height: 70vh; padding: 8rem 2rem;">
+    <section id="sim-section">
+        <div class="container">
+            <div class="reveal" style="text-align: center; margin-bottom: 3rem;">
+                <h2 style="margin-bottom: 1rem;">Choose Your Scenario</h2>
+                <p style="font-size: 1rem; margin: 0 auto; color: var(--text-mute); max-width: 600px;">Select a role to
+                    see how your Virtual Twin handles real workplace situations.</p>
+            </div>
+
+            <div class="sim-container">
+                <div class="sim-controls">
+                    <div class="role-btn active" onclick="setRole('manager')">
+                        <div class="role-avatar">MGR</div>
+                        <div class="role-info">
+                            <h4>The Manager</h4>
+                            <span>→ visibility</span>
+                        </div>
+                    </div>
+                    <div class="role-btn" onclick="setRole('maker')">
+                        <div class="role-avatar">MKR</div>
+                        <div class="role-info">
+                            <h4>The Maker</h4>
+                            <span>→ deep work</span>
+                        </div>
+                    </div>
+                    <div class="role-btn" onclick="setRole('sales')">
+                        <div class="role-avatar">SLS</div>
+                        <div class="role-info">
+                            <h4>Sales Lead</h4>
+                            <span>→ close deals</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-window">
+                    <div class="chat-header">
+                        <div class="channel-name" id="channel-title">product-updates</div>
+                        <div style="font-size: 0.75rem; color: #94a3b8; font-family: 'Fira Code', monospace;">32 online
+                        </div>
+                    </div>
+
+                    <div class="impact-toast" id="impact-toast">
+                        <span id="impact-text">Saved 20 mins of research</span>
+                    </div>
+
+                    <div class="chat-body" id="chat-body">
+                    </div>
+
+                    <div class="prompt-overlay" id="prompt-area">
+                    </div>
+
+                    <div class="chat-input-area">
+                        <div class="fake-input" id="fake-input">Message...</div>
+                        <div
+                            style="font-size: 0.7rem; color: #94a3b8; margin-top: 6px; font-family: 'Fira Code', monospace;">
+                            ◆ Twin active
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section style="min-height: 40vh; border-top: 1px solid #e2e8f0;">
         <div class="container" style="text-align: center;">
             <div class="reveal">
-                <h1 style="margin-bottom: 1.5rem;">The Future Runs on Virtual Twins.</h1>
-                <p style="font-size: 1.4rem; max-width: 800px; margin: 0 auto 1rem;">Every knowledge worker gets a tireless delegate. Every team gets autonomous coordination. Every organization reclaims billions in lost productivity.</p>
-                <p style="color: var(--text-dim); max-width: 700px; margin: 0 auto 3rem;">The coordination tax isn't inevitable. It's a choice. Choose differently.</p>
-
-                <a href="https://form.typeform.com/to/MqENXj6M" class="cta-button" style="text-decoration: none; display: inline-block;">
-                    <span style="position: relative; z-index: 1;">Express Interest</span>
-                </a>
-
-                <div class="stats-bottom-grid" style="margin-top: 5rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: 3rem; max-width: 1100px; margin-left: auto; margin-right: auto;">
-                    <div style="text-align: center;">
-                        <div style="font-family: 'Inter', sans-serif; font-size: 3rem; color: var(--text); margin-bottom: 0.5rem; font-weight: 600; letter-spacing: -0.02em;">2.5B hrs</div>
-                        <div style="font-size: 0.9rem; line-height: 1.5; color: var(--text-mute); margin-bottom: 1rem; font-weight: 300;">Annual meeting time wasted in US alone</div>
-                        <div style="font-size: 0.7rem; color: var(--text-dim); font-family: 'Inter'; font-weight: 400;">Otter.ai, 2023</div>
-                    </div>
-                    <div style="text-align: center;">
-                        <div style="font-family: 'Inter', sans-serif; font-size: 3rem; color: var(--text); margin-bottom: 0.5rem; font-weight: 600; letter-spacing: -0.02em;">$25K</div>
-                        <div style="font-size: 0.9rem; line-height: 1.5; color: var(--text-mute); margin-bottom: 1rem; font-weight: 300;">Annual cost per employee in wasted meeting time</div>
-                        <div style="font-size: 0.7rem; color: var(--text-dim); font-family: 'Inter'; font-weight: 400;">Harvard Business Review, 2024</div>
-                    </div>
-                    <div style="text-align: center;">
-                        <div style="font-family: 'Inter', sans-serif; font-size: 3rem; color: var(--text); margin-bottom: 0.5rem; font-weight: 600; letter-spacing: -0.02em;">70%</div>
-                        <div style="font-size: 0.9rem; line-height: 1.5; color: var(--text-mute); margin-bottom: 1rem; font-weight: 300;">Of meetings where attendees multitask due to low relevance</div>
-                        <div style="font-size: 0.7rem; color: var(--text-dim); font-family: 'Inter'; font-weight: 400;">Microsoft Work Trend Index, 2024</div>
-                    </div>
+                <h2 style="font-size: 2rem;">Stop paying the tax of coordination.</h2>
+                <a href="https://form.typeform.com/to/MqENXj6M" class="cta-button">Express Interest</a>
+                <div style="margin-top: 3rem; font-size: 0.8rem; color: var(--text-mute);">
+                    © 2025 brekfuz.
+                    <div style="margin-top: 0.5rem; font-style: italic; font-size: 0.75rem;">Break the fuzz. Clear the
+                        noise.</div>
                 </div>
             </div>
         </div>
     </section>
 
     <script>
-        // --- 0. PROGRESS BAR ---
-        const progressBar = document.getElementById('progress-bar');
-        window.addEventListener('scroll', () => {
-            const windowHeight = window.innerHeight;
-            const documentHeight = document.documentElement.scrollHeight - windowHeight;
-            const scrollTop = window.scrollY;
-            const progress = (scrollTop / documentHeight) * 100;
-            progressBar.style.width = progress + '%';
+        // --- PARALLAX EFFECT FOR ICONS ---
+        document.addEventListener('mousemove', (e) => {
+            const wrappers = document.querySelectorAll('.float-wrapper');
+            const x = (e.clientX - window.innerWidth / 2) / 100;
+            const y = (e.clientY - window.innerHeight / 2) / 100;
+            wrappers.forEach(wrapper => {
+                const speed = wrapper.getAttribute('data-speed');
+                wrapper.style.transform = `translate3d(${x * speed * 2}px, ${y * speed * 2}px, 0)`;
+            });
         });
 
-        // --- 1. STATS COUNTER ANIMATION ---
-        function animateStats(element) {
-            const counters = element.querySelectorAll('.counter');
-            counters.forEach(counter => {
-                const target = +counter.getAttribute('data-target');
-                const speed = 2000 / target; // Normalize duration
-
-                let count = 0;
-                const updateCount = () => {
-                    count++;
-                    counter.innerText = count + '%';
-                    if (count < target) {
-                        setTimeout(updateCount, 30);
-                    } else {
-                        counter.innerText = target + '%';
-                    }
-                };
-                // Only start animation if it hasn't run yet for this element
-                if(!counter.classList.contains('animated')) {
-                    updateCount();
-                    counter.classList.add('animated');
-                }
-            });
-
-            // Trigger CSS transition for bars
-            const bars = element.querySelector('.resource-bar-container');
-            if(bars) bars.classList.add('active');
-        }
-
-        // --- 2. TERMINAL TYPING ENGINE (USE CASES) ---
+        // --- TERMINAL LOGIC ---
         const terminal = document.getElementById('terminal-output');
+        const summaryBox = document.getElementById('summary-text');
         const scenarios = [
-            [
-                { text: "[INTERRUPT] @sarah Can you jump on a quick call about the pricing doc?", type: 'log-human' },
-                { text: "[TWIN] Sarah is in deep work (coding sprint, 40 min remaining).", type: 'log-agent' },
-                { text: "[TWIN] Analyzing request urgency + Sarah's calendar preferences...", type: 'log-agent' },
-                { text: "[TWIN] Located pricing doc v4. Shared with requester + context summary.", type: 'log-agent' },
-                { text: "[RESOLVED] Question answered. Call avoided. Sarah never interrupted.", type: 'log-agent' },
-                { text: "[IMPACT] 1 context switch prevented. 23 minutes of flow time preserved.", type: 'log-agent', highlight: true }
-            ],
-            [
-                { text: "[REQUEST] Marketing needs approval on new campaign budget by EOD", type: 'log-human' },
-                { text: "[TWIN] Analyzing: Budget request $47K. Manager (Alex) in back-to-back meetings.", type: 'log-agent' },
-                { text: "[TWIN] Checking past approvals: Similar campaigns $40-50K consistently approved.", type: 'log-agent' },
-                { text: "[TWIN] Within delegation threshold. Auto-approved per Alex's policy.", type: 'log-agent' },
-                { text: "[DELIVERED] Approval issued. Marketing unblocked. Alex notified async.", type: 'log-agent' },
-                { text: "[IMPACT] Decision made instantly. Zero sync time. No approval bottleneck.", type: 'log-agent', highlight: true }
-            ],
-            [
-                { text: "[CONFLICT] 3 meeting invites received for same time slot tomorrow 2pm", type: 'log-human' },
-                { text: "[TWIN] Detected scheduling conflict. Analyzing priority signals...", type: 'log-agent' },
-                { text: "[TWIN] 1:1 with direct report (recurring, high priority) vs 2 status syncs.", type: 'log-agent' },
-                { text: "[TWIN] Declined status syncs. Requested async updates instead.", type: 'log-agent' },
-                { text: "[TWIN] Negotiated alternative time for second sync based on attendee availability.", type: 'log-agent' },
-                { text: "[IMPACT] Calendar optimized. 2 unnecessary meetings eliminated. Zero back-and-forth.", type: 'log-agent', highlight: true }
-            ]
+            {
+                lines: [
+                    { text: "[INTERRUPT] @sarah Can you jump on a quick call?", type: 'log-human' },
+                    { text: "[TWIN] Sarah is in Deep Work (40 min left).", type: 'log-agent' },
+                    { text: "[TWIN] Located pricing doc v4. Shared with requester.", type: 'log-agent' },
+                    { text: "[RESOLVED] Question answered. Call avoided.", type: 'log-success' }
+                ],
+                summary: "Focus Saved: 25 mins.<br><span class='summary-highlight'>Context Switch Prevented.</span>"
+            },
+            {
+                lines: [
+                    { text: "[REQUEST] Marketing needs budget approval by EOD", type: 'log-human' },
+                    { text: "[TWIN] Manager (Alex) is in meetings.", type: 'log-agent' },
+                    { text: "[TWIN] Request within threshold (<$50k). Auto-approved as per Alex's policy.", type: 'log-agent' },
+                    { text: "[RESOLVED] Approval issued. Marketing unblocked. Alex notified async.", type: 'log-success' }
+                ],
+                summary: "Bottleneck Removed.<br><span class='summary-highlight'>Zero Wait Time.</span>"
+            },
+            {
+                lines: [
+                    { text: "[CONFLICT] 3 meeting invites received for same time slot.", type: 'log-human' },
+                    { text: "[TWIN] Detecting priorities. Keeping 'Eng Sync' (Manager present).", type: 'log-agent' },
+                    { text: "[TWIN] Declining others. Sending async updates instead.", type: 'log-agent' },
+                    { text: "[RESOLVED] Calendar conflict resolved automatically.", type: 'log-success' }
+                ],
+                summary: "Calendar Optimized.<br><span class='summary-highlight'>Negotiation Time: 0 mins.</span>"
+            },
+            {
+                lines: [
+                    { text: "[LEADER_ASK] @Twin What did the mobile team ship this week?", type: 'log-human' },
+                    { text: "[TWIN] Aggregating data from Github (PRs) and Linear (Issues)...", type: 'log-agent' },
+                    { text: "[TWIN] Summary: 4 Features, 12 Bugs. Critical hotfix deployed.", type: 'log-agent' },
+                    { text: "[RESOLVED] Update delivered instantly.", type: 'log-success' }
+                ],
+                summary: "Manual Reporting Eliminated.<br><span class='summary-highlight'>Data Source: Mobile Team.</span>"
+            }
         ];
-
         let scenarioIndex = 0;
 
-        async function typeWriter(text, className, isHighlight = false) {
+        async function typeWriter(text, className) {
             const line = document.createElement('div');
-            line.className = `log-entry ${className}`;
-            if (isHighlight) line.classList.add('highlight');
-
-            const time = new Date().toLocaleTimeString('en-US', {hour12: false, hour:'2-digit', minute:'2-digit', second:'2-digit'});
-            const timeSpan = `<span class="log-time">[${time}]</span> `;
-
-            // Insert before cursor
-            const cursor = document.querySelector('.cursor');
-            terminal.insertBefore(line, cursor);
-
+            line.className = `log-entry`;
+            const time = new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            line.innerHTML = `<span class="log-time">[${time}]</span><span class="log-content ${className}"></span>`;
+            terminal.insertBefore(line, document.querySelector('.cursor'));
+            const contentSpan = line.querySelector('.log-content');
             let i = 0;
             return new Promise(resolve => {
                 const interval = setInterval(() => {
-                    if (i === 0) {
-                        line.innerHTML = timeSpan;
-                    }
-                    line.innerHTML += text.charAt(i);
-                    i++;
+                    contentSpan.innerHTML += text.charAt(i); i++;
                     terminal.scrollTop = terminal.scrollHeight;
-                    if (i >= text.length) {
-                        clearInterval(interval);
-                        resolve();
-                    }
+                    if (i >= text.length) { clearInterval(interval); resolve(); }
                 }, 15);
             });
         }
 
         async function runTerminal() {
             const scenario = scenarios[scenarioIndex];
-            terminal.innerHTML = '<span class="cursor"></span>'; // Clear
-
-            for (let step of scenario) {
-                await new Promise(r => setTimeout(r, 400)); // Pause between lines
-                await typeWriter(step.text, step.type, step.highlight || false);
+            terminal.innerHTML = '<span class="cursor"></span>';
+            summaryBox.classList.remove('show');
+            for (let step of scenario.lines) {
+                await new Promise(r => setTimeout(r, 500));
+                await typeWriter(step.text, step.type);
             }
-
-            await new Promise(r => setTimeout(r, 3500)); // Wait before next scenario
+            summaryBox.innerHTML = scenario.summary;
+            summaryBox.classList.add('show');
+            await new Promise(r => setTimeout(r, 4500));
             scenarioIndex = (scenarioIndex + 1) % scenarios.length;
             runTerminal();
         }
 
-        // Start the terminal when it comes into view
         const termObserver = new IntersectionObserver((entries) => {
-            if(entries[0].isIntersecting) {
-                runTerminal();
-                termObserver.disconnect(); // Only start once
-            }
+            if (entries[0].isIntersecting) { runTerminal(); termObserver.disconnect(); }
         });
         termObserver.observe(document.querySelector('.terminal-window'));
 
-
-        // --- 3. NOTIFICATION STREAM (PRESERVED) ---
-        const streamContainer = document.getElementById('notification-stream');
-        const taxTexts = ["Can we reschedule?", "Quick sync?", "Where is that file?", "Update??", "Ping", "Did you see my email?", "Urgent", "Who owns this?"];
-        const resolvedTexts = ["Synced automatically", "Conflict resolved", "Context shared", "Meeting avoided", "Update logged"];
-
-        let particles = [];
-        class NotifParticle {
-            constructor(index, total) {
-                this.element = document.createElement('div');
-                this.element.className = 'notif-pill tax';
-                this.x = Math.random() * window.innerWidth;
-                // Bias distribution toward top and middle of viewport for immediate visibility
-                this.y = (Math.random() * window.innerHeight * 1.5) - (window.innerHeight * 0.2);
-                this.speed = 0.5 + Math.random() * 0.7; // Balanced speed: 0.5-1.2
-                this.textIndex = Math.floor(Math.random() * taxTexts.length);
-                this.element.innerHTML = `<span></span> ${taxTexts[this.textIndex]}`;
-                this.element.style.left = `${this.x}px`;
-                this.element.style.top = `${this.y}px`; // Set initial position
-                this.element.style.transform = `scale(${0.6 + Math.random() * 0.5})`;
-                this.element.style.opacity = 0.3 + Math.random() * 0.4;
-                streamContainer.appendChild(this.element);
-            }
-            update() {
-                this.y -= this.speed;
-                if (this.y < -50) {
-                    this.y = window.innerHeight + 50;
-                    this.x = Math.random() * window.innerWidth;
-                }
-                const progress = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
-                if (progress > 0.65) {
-                    if (this.element.classList.contains('tax')) {
-                        this.element.className = 'notif-pill resolved';
-                        this.element.innerHTML = `<span></span> ${resolvedTexts[this.textIndex % resolvedTexts.length]}`;
-                        this.element.style.opacity = 0.5; // Increased from 0.15 for better visibility
-                    }
-                } else {
-                    if (this.element.classList.contains('resolved')) {
-                        this.element.className = 'notif-pill tax';
-                        this.element.innerHTML = `<span></span> ${taxTexts[this.textIndex]}`;
-                        this.element.style.opacity = 0.3 + Math.random() * 0.4;
-                    }
-                }
-                this.element.style.top = `${this.y}px`;
-            }
-        }
-        const totalParticles = window.innerWidth < 768 ? 8 : 18;
-        for (let i = 0; i < totalParticles; i++) particles.push(new NotifParticle(i, totalParticles));
-        function animateStream() { particles.forEach(p => p.update()); requestAnimationFrame(animateStream); }
-        animateStream();
-
-        // --- 4. BACKGROUND & INTERACTION ---
+        // --- BACKGROUND NODES ---
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         let width, height;
         const resize = () => { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; };
         window.addEventListener('resize', resize); resize();
-
         const nodes = [];
-        for(let i=0; i<50; i++) nodes.push({
-            x: Math.random()*width, y: Math.random()*height,
-            vx: (Math.random()-0.5)*0.4, vy: (Math.random()-0.5)*0.4, size: Math.random()*1.5
-        });
-
+        for (let i = 0; i < 35; i++) nodes.push({ x: Math.random() * width, y: Math.random() * height, vx: (Math.random() - 0.5) * 0.4, vy: (Math.random() - 0.5) * 0.4, size: Math.random() * 2 });
         function animateCanvas() {
             ctx.clearRect(0, 0, width, height);
+            ctx.fillStyle = '#2563eb';
             nodes.forEach(node => {
                 node.x += node.vx; node.y += node.vy;
-                if(node.x<0||node.x>width) node.vx*=-1; if(node.y<0||node.y>height) node.vy*=-1;
-                const progress = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
-                const r = 255 - (progress * 255);
-                const g = 255 - (progress * 43);
-                ctx.fillStyle = `rgba(${r},${g},255,0.15)`;
-                ctx.beginPath(); ctx.arc(node.x, node.y, node.size, 0, Math.PI*2); ctx.fill();
+                if (node.x < 0 || node.x > width) node.vx *= -1; if (node.y < 0 || node.y > height) node.vy *= -1;
+                ctx.beginPath(); ctx.arc(node.x, node.y, node.size, 0, Math.PI * 2); ctx.globalAlpha = 0.1; ctx.fill();
                 nodes.forEach(other => {
-                    const d = Math.hypot(node.x-other.x, node.y-other.y);
-                    if(d<120) {
-                        ctx.strokeStyle = `rgba(${r},255,255,${0.1-d/1200})`;
-                        ctx.lineWidth = 0.5; ctx.beginPath(); ctx.moveTo(node.x, node.y); ctx.lineTo(other.x, other.y); ctx.stroke();
-                    }
+                    const d = Math.hypot(node.x - other.x, node.y - other.y);
+                    if (d < 120) { ctx.beginPath(); ctx.moveTo(node.x, node.y); ctx.lineTo(other.x, other.y); ctx.strokeStyle = '#2563eb'; ctx.lineWidth = 0.5; ctx.globalAlpha = (120 - d) / 1200; ctx.stroke(); }
                 });
             });
             requestAnimationFrame(animateCanvas);
         }
         animateCanvas();
 
-        // Observers
+        // --- SCROLL REVEAL ---
         const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                    entry.target.classList.add('draw-active');
-
-                    // Trigger stats animation if this is the stats card
-                    if(entry.target.classList.contains('stats-card') || entry.target.querySelector('.stats-card')) {
-                        animateStats(entry.target);
-                    }
-                }
-            });
+            entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('active'); entry.target.classList.add('draw-active'); } });
         }, { threshold: 0.15 });
+        document.querySelectorAll('.reveal, .hand-note').forEach(el => observer.observe(el));
 
-        // Added .stats-card to observer list
-        document.querySelectorAll('.reveal, .glass-card, .hand-note, .hl-wrap, .virtual-twin-img, .stats-card').forEach(el => observer.observe(el));
+        // --- SIMULATOR LOGIC (NEW) ---
+        const simData = {
+            manager: {
+                channel: "product-updates",
+                intro: [
+                    { sender: "Jason (Dev)", text: "Just merged the payment gateway fix.", type: "incoming" },
+                    { sender: "Sarah (Design)", text: "Updated the Figma prototypes for Q3.", type: "incoming" }
+                ],
+                prompts: [
+                    {
+                        label: "Get project status summary",
+                        input: "@Twin Catch me up on the Payment Gateway issues from last week.",
+                        response: "Searching Jira, Slack, and Github... <br><br><strong>Summary:</strong> The gateway had a 403 error spike. <br>• <strong>Root Cause:</strong> API Token expiry<br>• <strong>Fix:</strong> Merged by Jason 15m ago (PR #402)<br>• <strong>Status:</strong> All systems operational",
+                        impact: "Research time saved: 45 mins"
+                    },
+                    {
+                        label: "Identify team blockers",
+                        input: "@Twin Is anyone blocked on the new dashboard?",
+                        response: "Scanning daily standups and Slack threads...<br><br><strong>Yes, 1 blocker detected:</strong><br>• Frontend team waiting on updated API Specs from Backend<br>• Blocked for: 2 days<br>• Impact: Dashboard launch delayed",
+                        impact: "Team unblocked instantly"
+                    }
+                ]
+            },
+            maker: {
+                channel: "dm-product-manager",
+                intro: [
+                    { sender: "PM (Alex)", text: "Hey! Do you have the link to the updated API docs?", type: "incoming" },
+                    { sender: "PM (Alex)", text: "Client is asking for them ASAP.", type: "incoming" }
+                ],
+                prompts: [
+                    {
+                        label: "Let Twin auto-respond",
+                        input: "(Auto-Pilot engaged)",
+                        response: "<strong>Twin Intercept:</strong><br>Hi Alex, Kaiya is in Deep Work mode right now.<br><br>Here is the link you requested: <a>docs.internal/api/v2</a><br><em>(Source: Pinned in #eng-resources)</em>",
+                        impact: "Focus state protected"
+                    },
+                    {
+                        label: "Decline meeting invite",
+                        input: "(Meeting invite received: 'Quick Sync' at 2pm)",
+                        response: "<strong>Twin Analysis:</strong><br>You're in a coding sprint (90 min remaining).<br><br>• <strong>Action:</strong> Declined meeting<br>• <strong>Alternative:</strong> Offered async update via Slack<br>• <strong>Reason shared:</strong> 'Deep work block - happy to catch up after 3:30pm'",
+                        impact: "Flow time preserved: 90 mins"
+                    }
+                ]
+            },
+            sales: {
+                channel: "email-acme-corp",
+                intro: [
+                    { sender: "Client (John)", text: "We'd love to see a demo. How is next Tuesday?", type: "incoming" },
+                    { sender: "Client (John)", text: "Or Wednesday afternoon?", type: "incoming" }
+                ],
+                prompts: [
+                    {
+                        label: "Schedule demo automatically",
+                        input: "@Twin Coordinate a time with John.",
+                        response: "<strong>Twin Action:</strong><br>Checked your calendar against John's proposed times.<br><br>• <strong>Action:</strong> Email sent to John<br>• <strong>Proposal:</strong> Tuesday at 2pm EST (your only free slot)<br>• <strong>Demo link:</strong> Auto-generated and attached",
+                        impact: "Scheduled in 0 emails"
+                    },
+                    {
+                        label: "Follow up on proposal",
+                        input: "@Twin Follow up on the pricing proposal we sent last week.",
+                        response: "<strong>Twin Research:</strong><br>Found proposal sent 6 days ago. No response yet.<br><br>• <strong>Action:</strong> Drafted gentle follow-up email<br>• <strong>Context added:</strong> Referenced their Q3 timeline mentioned in last call<br>• <strong>Ready to send</strong> - review draft?",
+                        impact: "Context-aware outreach"
+                    }
+                ]
+            }
+        };
 
-        // Tilt
-        document.addEventListener('mousemove', (e) => {
-            document.querySelectorAll('.glass-card').forEach(card => {
-                const rect = card.getBoundingClientRect();
-                if(rect.top < window.innerHeight && rect.bottom > 0) {
-                    const rotX = (0.5 - e.clientY/window.innerHeight) * 8;
-                    const rotY = (e.clientX/window.innerWidth - 0.5) * 8;
-                    card.style.transform = `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
-                }
+        let currentRole = 'manager';
+
+        function initSim() { setRole('manager'); }
+
+        function setRole(role) {
+            currentRole = role;
+            document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+            if (event && event.currentTarget) event.currentTarget.classList.add('active');
+            else document.querySelector('.role-btn').classList.add('active');
+
+            const chatBody = document.getElementById('chat-body');
+            const channelTitle = document.getElementById('channel-title');
+            const promptArea = document.getElementById('prompt-area');
+            const impactToast = document.getElementById('impact-toast');
+
+            impactToast.classList.remove('show');
+            chatBody.innerHTML = '';
+
+            const data = simData[role];
+            channelTitle.innerText = data.channel;
+
+            data.intro.forEach((msg, index) => {
+                setTimeout(() => { addMessage(msg.sender, msg.text, msg.type); }, index * 500);
             });
-        });
 
+            promptArea.innerHTML = '';
+            setTimeout(() => {
+                data.prompts.forEach((p, i) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'action-chip';
+                    btn.innerText = p.label;
+                    btn.style.animationDelay = `${i * 0.1}s`;
+                    btn.onclick = () => runScenario(p);
+                    promptArea.appendChild(btn);
+                });
+            }, 1000);
+        }
+
+        function addMessage(sender, text, type) {
+            const chatBody = document.getElementById('chat-body');
+            const div = document.createElement('div');
+            let content = text;
+            if (type === 'twin') content = `<div class="twin-badge">✦ Virtual Twin</div>${text}`;
+            div.className = `msg ${type}`;
+            div.innerHTML = `<span class="msg-sender">${sender}</span>${content}`;
+            chatBody.appendChild(div);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        function runScenario(scenario) {
+            const input = document.getElementById('fake-input');
+            const promptArea = document.getElementById('prompt-area');
+            promptArea.style.opacity = '0';
+            promptArea.style.pointerEvents = 'none';
+
+            input.classList.add('typing');
+            let i = 0;
+            const typeInterval = setInterval(() => {
+                input.innerText = scenario.input.substring(0, i) + "|";
+                i++;
+                if (i > scenario.input.length) {
+                    clearInterval(typeInterval);
+                    input.innerText = scenario.input;
+                    setTimeout(() => {
+                        if (currentRole !== 'maker') addMessage("You", scenario.input, "outgoing");
+                        input.innerText = "Message...";
+                        input.classList.remove('typing');
+                        setTimeout(() => {
+                            const loadingId = 'loading-' + Date.now();
+                            const chatBody = document.getElementById('chat-body');
+                            const loader = document.createElement('div');
+                            loader.className = 'msg twin';
+                            loader.id = loadingId;
+                            loader.innerHTML = `<span style="color:#3b82f6">Twin is thinking...</span>`;
+                            chatBody.appendChild(loader);
+                            chatBody.scrollTop = chatBody.scrollHeight;
+                            setTimeout(() => {
+                                document.getElementById(loadingId).remove();
+                                addMessage("Twin", scenario.response, "twin");
+                                const toast = document.getElementById('impact-toast');
+                                document.getElementById('impact-text').innerText = scenario.impact;
+                                toast.classList.add('show');
+                                setTimeout(() => { promptArea.style.opacity = '1'; promptArea.style.pointerEvents = 'auto'; }, 2000);
+                            }, 1500);
+                        }, 600);
+                    }, 400);
+                }
+            }, 30);
+        }
+
+        setTimeout(initSim, 100);
     </script>
-    <script>
-        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-    </script>
-    <script defer src="/_vercel/insights/script.js"></script>
 </body>
+
 </html>
