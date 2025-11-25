@@ -924,29 +924,31 @@
             }
 
             /* Show and reposition app icons on mobile */
-            .float-wrapper {
+            #hero-section .float-wrapper {
                 display: block !important;
-                position: absolute;
-                opacity: 0.4;
-                animation: float-mobile 4s ease-in-out infinite;
+                position: absolute !important;
+                opacity: 0.5 !important;
+                animation: float-mobile 4s ease-in-out infinite !important;
+                z-index: 1 !important;
             }
 
-            .app-icon {
-                width: 32px;
-                height: 32px;
+            #hero-section .app-icon {
+                width: 36px !important;
+                height: 36px !important;
             }
 
-            .app-icon img {
-                filter: opacity(0.7);
+            #hero-section .app-icon img {
+                filter: none !important;
+                opacity: 1 !important;
             }
 
             /* Position icons - 3 top, 3 bottom */
-            .fw-1 { top: 10%; left: 5%; animation-delay: 0s; }
-            .fw-2 { top: 15%; right: 8%; animation-delay: 0.5s; }
-            .fw-3 { top: 5%; left: 50%; transform: translateX(-50%); animation-delay: 1s; }
-            .fw-4 { bottom: 15%; left: 10%; animation-delay: 1.5s; }
-            .fw-5 { bottom: 10%; right: 5%; animation-delay: 2s; }
-            .fw-6 { bottom: 20%; left: 50%; transform: translateX(-50%); animation-delay: 2.5s; }
+            #hero-section .fw-1 { top: 8% !important; left: 3% !important; animation-delay: 0s !important; }
+            #hero-section .fw-2 { top: 12% !important; right: 5% !important; animation-delay: 0.5s !important; }
+            #hero-section .fw-3 { top: 4% !important; left: 50% !important; transform: translateX(-50%) !important; animation-delay: 1s !important; }
+            #hero-section .fw-4 { bottom: 12% !important; left: 5% !important; animation-delay: 1.5s !important; }
+            #hero-section .fw-5 { bottom: 8% !important; right: 3% !important; animation-delay: 2s !important; }
+            #hero-section .fw-6 { bottom: 16% !important; left: 50% !important; transform: translateX(-50%) !important; animation-delay: 2.5s !important; }
 
             @keyframes float-mobile {
                 0%, 100% { transform: translateY(0px); }
@@ -990,10 +992,15 @@
                 line-height: 1.15;
             }
 
-            /* Use the same SVG highlight as desktop */
+            /* Use the same SVG highlight as desktop - adjust position */
             #hero-section h1 .hl-wrap {
                 position: relative;
                 display: inline-block;
+            }
+
+            #hero-section h1 .hl-wrap .annotation-svg.highlight {
+                top: 50% !important;
+                transform: translateY(-50%);
             }
 
             h2 {
@@ -1336,17 +1343,17 @@
             }
 
             /* Smaller app icons on small phones */
-            .app-icon {
-                width: 28px;
-                height: 28px;
+            #hero-section .app-icon {
+                width: 32px !important;
+                height: 32px !important;
             }
 
-            .fw-1 { top: 8%; left: 3%; }
-            .fw-2 { top: 12%; right: 5%; }
-            .fw-3 { top: 3%; left: 50%; transform: translateX(-50%); }
-            .fw-4 { bottom: 12%; left: 5%; }
-            .fw-5 { bottom: 8%; right: 3%; }
-            .fw-6 { bottom: 18%; left: 50%; transform: translateX(-50%); }
+            #hero-section .fw-1 { top: 6% !important; left: 2% !important; }
+            #hero-section .fw-2 { top: 10% !important; right: 3% !important; }
+            #hero-section .fw-3 { top: 2% !important; }
+            #hero-section .fw-4 { bottom: 10% !important; left: 3% !important; }
+            #hero-section .fw-5 { bottom: 6% !important; right: 2% !important; }
+            #hero-section .fw-6 { bottom: 14% !important; }
         }
     </style>
 </head>
