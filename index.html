@@ -617,6 +617,11 @@
             display: none;
         }
 
+        /* Hide mobile nav on desktop */
+        .mobile-nav {
+            display: none;
+        }
+
         .role-btn {
             display: flex;
             align-items: center;
@@ -961,9 +966,9 @@
             }
 
             #hero-section {
-                min-height: 100vh;
-                min-height: 100dvh; /* Dynamic viewport height for mobile browsers */
-                padding: 2rem 1.25rem;
+                min-height: 85vh;
+                min-height: 85dvh; /* Show peek of next section */
+                padding: 4rem 1.25rem 2rem 1.25rem;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -972,6 +977,42 @@
 
             #hero-section .hero-scene {
                 position: relative;
+            }
+
+            /* Mobile Navigation Menu */
+            .mobile-nav {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(10px);
+                border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+                z-index: 1000;
+                padding: 0.75rem 1rem;
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            }
+
+            .mobile-nav a {
+                text-decoration: none;
+                color: var(--text-mute);
+                font-size: 0.75rem;
+                font-weight: 600;
+                font-family: 'Fira Code', monospace;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                padding: 0.5rem 0.75rem;
+                border-radius: 6px;
+                transition: all 0.3s ease;
+            }
+
+            .mobile-nav a:hover,
+            .mobile-nav a.active {
+                color: var(--brand-blue);
+                background: rgba(59, 130, 246, 0.1);
             }
 
             /* Container */
@@ -1360,6 +1401,14 @@
 
 <body>
 
+    <!-- Mobile Navigation -->
+    <nav class="mobile-nav">
+        <a href="#hero-section">Home</a>
+        <a href="#problem-section">Problem</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#sim-section">Try Demo</a>
+    </nav>
+
     <canvas id="bg-canvas"></canvas>
 
     <section id="hero-section" style="text-align: center;">
@@ -1417,7 +1466,7 @@
         </div>
     </section>
 
-    <section>
+    <section id="problem-section">
         <div class="container">
             <div class="reveal">
                 <div class="hand-note red" style="top: -30px; left: 0; transform: rotate(-3deg);">The Problem</div>
@@ -1495,7 +1544,7 @@
         </div>
     </section>
 
-    <section class="twin-section" style="background: rgba(248, 250, 252, 0.8); padding: 3rem 1.5rem;">
+    <section id="how-it-works" class="twin-section" style="background: rgba(248, 250, 252, 0.8); padding: 3rem 1.5rem;">
         <div class="container">
             <div class="reveal">
                 <h2>How Twins Operate</h2>
@@ -1955,6 +2004,49 @@
         }
 
         setTimeout(initSim, 100);
+
+        // --- MOBILE NAVIGATION ---
+        if (window.innerWidth <= 900) {
+            const navLinks = document.querySelectorAll('.mobile-nav a');
+            const sections = ['hero-section', 'problem-section', 'how-it-works', 'sim-section'];
+
+            // Smooth scroll
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('href').substring(1);
+                    const targetSection = document.getElementById(targetId);
+                    if (targetSection) {
+                        const offsetTop = targetSection.offsetTop - 50; // Account for nav height
+                        window.scrollTo({
+                            top: offsetTop,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+
+            // Update active state on scroll
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(sectionId => {
+                    const section = document.getElementById(sectionId);
+                    if (section) {
+                        const sectionTop = section.offsetTop - 100;
+                        if (window.scrollY >= sectionTop) {
+                            current = sectionId;
+                        }
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${current}`) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+        }
     </script>
 </body>
 
