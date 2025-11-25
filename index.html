@@ -919,9 +919,38 @@
             /* Hide decorative elements */
             .grid-arrow,
             .feature-note,
-            .blue-pen,
-            .float-wrapper {
+            .blue-pen {
                 display: none !important;
+            }
+
+            /* Show and reposition app icons on mobile */
+            .float-wrapper {
+                display: block !important;
+                position: absolute;
+                opacity: 0.4;
+                animation: float-mobile 4s ease-in-out infinite;
+            }
+
+            .app-icon {
+                width: 32px;
+                height: 32px;
+            }
+
+            .app-icon img {
+                filter: opacity(0.7);
+            }
+
+            /* Position icons - 3 top, 3 bottom */
+            .fw-1 { top: 10%; left: 5%; animation-delay: 0s; }
+            .fw-2 { top: 15%; right: 8%; animation-delay: 0.5s; }
+            .fw-3 { top: 5%; left: 50%; transform: translateX(-50%); animation-delay: 1s; }
+            .fw-4 { bottom: 15%; left: 10%; animation-delay: 1.5s; }
+            .fw-5 { bottom: 10%; right: 5%; animation-delay: 2s; }
+            .fw-6 { bottom: 20%; left: 50%; transform: translateX(-50%); animation-delay: 2.5s; }
+
+            @keyframes float-mobile {
+                0%, 100% { transform: translateY(0px); }
+                50% { transform: translateY(-10px); }
             }
 
             /* Section spacing */
@@ -936,6 +965,11 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                position: relative;
+            }
+
+            #hero-section .hero-scene {
+                position: relative;
             }
 
             /* Container */
@@ -1305,6 +1339,19 @@
                 font-size: 0.65rem;
                 padding: 5px 8px;
             }
+
+            /* Smaller app icons on small phones */
+            .app-icon {
+                width: 28px;
+                height: 28px;
+            }
+
+            .fw-1 { top: 8%; left: 3%; }
+            .fw-2 { top: 12%; right: 5%; }
+            .fw-3 { top: 3%; left: 50%; transform: translateX(-50%); }
+            .fw-4 { bottom: 12%; left: 5%; }
+            .fw-5 { bottom: 8%; right: 3%; }
+            .fw-6 { bottom: 18%; left: 50%; transform: translateX(-50%); }
         }
     </style>
 </head>
