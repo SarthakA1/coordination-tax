@@ -5,13 +5,23 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Virtual Twins | Coordination for Everyone</title>
+    <link rel="icon" type="image/png" href="assets/logo.png?v=2" />
+    <link rel="shortcut icon" href="/favicon.ico?v=2" />
+    <link rel="apple-touch-icon" href="assets/logo.png?v=2" />
     <meta name="description"
         content="Deploy autonomous Virtual Twins for every employee to handle coordination in Slack & Calendar." />
+    <meta property="og:image" content="assets/logo.png" />
+    <meta property="og:title" content="Virtual Twins | Coordination for Everyone" />
+    <meta property="og:description"
+        content="Deploy autonomous Virtual Twins for every employee to handle coordination in Slack & Calendar." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="assets/logo.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Fira+Code:wght@400;500;600&family=Reenie+Beanie&display=swap"
         rel="stylesheet">
+    <script defer src="/_vercel/insights/script.js"></script>
 
     <style>
         :root {
@@ -39,9 +49,33 @@
             box-sizing: border-box;
         }
 
+        /* --- GLOBAL BRAND LOGO --- */
+        .brand-logo {
+            position: fixed;
+            z-index: 2000;
+            /* Above everything */
+            top: 1.5rem;
+            left: 3rem;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .brand-logo img {
+            height: 40px;
+            width: auto;
+            display: block;
+        }
+
+        .brand-logo:hover {
+            transform: scale(1.05);
+            opacity: 0.9;
+        }
+
         body {
-            background-color: var(--bg);
-            background-image: radial-gradient(circle at 50% 0%, #fff 0%, transparent 70%);
+            background-color: #f8fafc;
+            background-image: radial-gradient(circle at 50% 0%, #ffffff 0%, #e2e8f0 100%);
             color: var(--text);
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
@@ -96,13 +130,15 @@
         .app-icon {
             width: 64px;
             height: 64px;
-            background: var(--glass-bg);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--glass-border);
+            border: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: 20px;
             padding: 14px;
-            box-shadow: var(--shadow-soft), 0 8px 16px rgba(0, 0, 0, 0.02);
+            box-shadow:
+                0 20px 30px -5px rgba(0, 0, 0, 0.1),
+                0 10px 10px -5px rgba(0, 0, 0, 0.04);
             animation: bob 5s ease-in-out infinite;
             transition: transform 0.3s var(--ease-lux);
         }
@@ -227,6 +263,20 @@
             opacity: 1;
         }
 
+        .hand-note.cta-note {
+            left: 100%;
+            top: 50%;
+            margin-left: 20px;
+            transform: translateY(-50%) rotate(-5deg);
+            width: max-content;
+        }
+
+        @media (max-width: 768px) {
+            .hand-note.cta-note {
+                display: none;
+            }
+        }
+
         .annotation-svg {
             position: absolute;
             pointer-events: none;
@@ -288,13 +338,15 @@
 
         /* --- STAT CARD --- */
         .stat-card {
-            background: linear-gradient(145deg, #fffafa, #fff5f5);
-            border: 1px solid rgba(239, 68, 68, 0.15);
-            border-radius: 16px;
+            background: #ffffff;
+            border: 1px solid rgba(226, 232, 240, 0.6);
+            border-radius: 24px;
             padding: 3rem;
             margin-top: 2rem;
             position: relative;
-            box-shadow: 0 10px 30px -10px rgba(239, 68, 68, 0.1);
+            box-shadow:
+                0 20px 40px -10px rgba(0, 0, 0, 0.05),
+                0 0 0 1px rgba(0, 0, 0, 0.01);
         }
 
         .big-stat {
@@ -439,6 +491,265 @@
             transition: all 0.5s ease;
         }
 
+        /* --- UNDER THE HOOD (LIGHT THEME & GRID) --- */
+        :root {
+            --uth-bg: #f8fafc;
+            --uth-panel-bg: #ffffff;
+            --uth-border: #e2e8f0;
+            --uth-text-main: #1e293b;
+            --uth-text-dim: #64748b;
+            --uth-accent-blue: #3b82f6;
+            --uth-accent-amber: #f59e0b;
+            --uth-accent-green: #10b981;
+        }
+
+        .uth-section {
+            padding: 4rem 0 6rem;
+            background: var(--uth-bg);
+            position: relative;
+            overflow: hidden;
+            color: var(--uth-text-main);
+        }
+
+        .uth-container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .uth-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .uth-header h2 {
+            margin-bottom: 0.5rem;
+            color: #0f172a;
+        }
+
+        .uth-header p {
+            color: var(--uth-text-dim);
+            font-size: 1.1rem;
+        }
+
+        /* 3-Column Grid */
+        .uth-grid {
+            display: grid;
+            grid-template-columns: 280px 1fr 280px;
+            gap: 2rem;
+            align-items: stretch;
+            height: 600px;
+        }
+
+        .uth-col {
+            background: var(--uth-panel-bg);
+            border: 1px solid var(--uth-border);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .uth-diagram-col {
+            position: relative;
+            background: white;
+            box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.02);
+        }
+
+        .uth-panel-header {
+            padding: 1rem;
+            border-bottom: 1px solid var(--uth-border);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #f1f5f9;
+        }
+
+        .uth-panel-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--uth-text-dim);
+            letter-spacing: 0.5px;
+        }
+
+        .uth-logs,
+        .uth-feed {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+        }
+
+        .uth-logs .log-entry {
+            color: var(--uth-text-main);
+            line-height: 1.5;
+            padding-bottom: 4px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .log-ts {
+            color: #94a3b8;
+            font-size: 0.7rem;
+        }
+
+        .log-key {
+            color: var(--uth-accent-blue);
+            font-weight: 600;
+        }
+
+        .log-val {
+            color: #475569;
+        }
+
+        .action-card {
+            background: #f8fafc;
+            padding: 10px;
+            border-radius: 6px;
+            border-left: 3px solid var(--uth-accent-green);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            color: #334155;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            animation: slideUpFade 0.3s forwards;
+        }
+
+        /* SVG Elements */
+        #uth-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .uth-node text {
+            font-family: 'Inter', sans-serif;
+            font-size: 11px;
+            font-weight: 600;
+            pointer-events: none;
+            text-anchor: middle;
+            dominant-baseline: middle;
+            fill: #475569;
+            transition: fill 0.2s;
+        }
+
+        .uth-edge {
+            fill: none;
+            stroke-width: 1.5;
+            stroke-opacity: 0.15;
+            transition: stroke-opacity 0.3s;
+        }
+
+        .uth-particle {
+            pointer-events: none;
+            animation: rgbCycle 1.5s linear infinite;
+        }
+
+        @keyframes rgbCycle {
+            0% {
+                fill: #3b82f6;
+            }
+
+            33% {
+                fill: #f59e0b;
+            }
+
+            66% {
+                fill: #10b981;
+            }
+
+            100% {
+                fill: #3b82f6;
+            }
+        }
+
+        /* Controls */
+        .uth-controls {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            z-index: 10;
+        }
+
+        .uth-control-btn {
+            background: white;
+            border: 1px solid var(--uth-border);
+            color: var(--uth-text-dim);
+            padding: 6px;
+            border-radius: 6px;
+            cursor: pointer;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .uth-control-btn:hover {
+            background: #f8fafc;
+            color: var(--uth-text-main);
+        }
+
+        .uth-tooltip {
+            position: absolute;
+            background: white;
+            border: 1px solid var(--uth-border);
+            padding: 8px 12px;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            font-size: 0.75rem;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            z-index: 40;
+            color: #334155;
+        }
+
+        @media (max-width: 1024px) {
+            .uth-grid {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+
+            .uth-diagram-col {
+                height: 500px;
+                order: 1;
+            }
+
+            .uth-logs-col {
+                height: 300px;
+                order: 2;
+            }
+
+            .uth-actions-col {
+                height: 300px;
+                order: 3;
+            }
+        }
+
+
+        /* Flow Animation */
+        @keyframes flowPulse {
+            0% {
+                stroke-dashoffset: 20;
+                opacity: 0.4;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                stroke-dashoffset: 0;
+                opacity: 0.4;
+            }
+        }
+
+        .flow-line {
+            stroke-dasharray: 4;
+            animation: flowPulse 1s linear infinite;
+        }
+
         .summary-content.show {
             opacity: 1;
             transform: translateY(0);
@@ -464,25 +775,45 @@
             }
         }
 
-        /* --- CTA BUTTON --- */
+        /* --- CTA BUTTON (LIQUID) --- */
         .cta-button {
             display: inline-block;
             margin-top: 2rem;
             padding: 1rem 2.5rem;
-            background: var(--brand-blue);
+            background: linear-gradient(180deg, #60a5fa 0%, #2563eb 100%);
             color: white;
             text-decoration: none;
             font-weight: 600;
-            border-radius: 8px;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+            border-radius: 99px;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow:
+                0 4px 6px rgba(37, 99, 235, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4),
+                inset 0 -2px 0 rgba(0, 0, 0, 0.1);
             position: relative;
             z-index: 2;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0) 100%);
+            pointer-events: none;
         }
 
         .cta-button:hover {
-            background: #1d4ed8;
             transform: translateY(-2px);
+            box-shadow:
+                0 15px 25px -5px rgba(37, 99, 235, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            background: linear-gradient(180deg, #5097f5 0%, #1d4ed8 100%);
         }
 
         /* --- FEATURE GRID --- */
@@ -545,16 +876,16 @@
         }
 
         .feature-card {
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.8);
+            background: #ffffff;
+            border: 1px solid rgba(226, 232, 240, 0.6);
             border-radius: 24px;
             padding: 2.5rem 2rem 2rem 2rem;
             transition: all 0.4s var(--ease-lux);
             position: relative;
             overflow: visible;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+            box-shadow:
+                0 10px 15px -3px rgba(0, 0, 0, 0.03),
+                0 4px 6px -4px rgba(0, 0, 0, 0.02);
             margin-top: 2rem;
             display: flex;
             flex-direction: column;
@@ -564,9 +895,11 @@
 
         .feature-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 25px 50px -12px rgba(37, 99, 235, 0.15);
-            background: rgba(255, 255, 255, 0.9);
-            border-color: #fff;
+            box-shadow:
+                0 20px 25px -5px rgba(0, 0, 0, 0.05),
+                0 8px 10px -6px rgba(0, 0, 0, 0.01);
+            border-color: rgba(59, 130, 246, 0.3);
+            background: #ffffff;
         }
 
         .feature-title {
@@ -652,22 +985,41 @@
             position: relative;
         }
 
-        .desktop-nav a:hover {
+        .desktop-nav a:hover,
+        .desktop-nav a.active {
             color: var(--brand-blue);
             transform: translateY(-1px);
         }
 
         .desktop-nav a.nav-cta {
-            color: var(--brand-blue);
+            color: white;
             font-weight: 600;
-            background: rgba(59, 130, 246, 0.08);
+            background: linear-gradient(180deg, #60a5fa 0%, #3b82f6 100%);
             padding: 0.5rem 1.25rem;
-            border-radius: 20px;
+            border-radius: 99px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow:
+                0 2px 4px rgba(37, 99, 235, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .desktop-nav a.nav-cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 100%);
+            pointer-events: none;
         }
 
         .desktop-nav a.nav-cta:hover {
-            background: rgba(59, 130, 246, 0.15);
             transform: translateY(-2px);
+            background: linear-gradient(180deg, #5097f5 0%, #1d4ed8 100%);
+            box-shadow: 0 6px 12px rgba(37, 99, 235, 0.3);
         }
 
         .role-btn {
@@ -1511,18 +1863,27 @@
             }
 
             /* Annotations - hide complex ones but keep highlights */
-            .annotation-svg:not(.highlight) {
-                display: none;
+            /* Annotations - hide all SVGs including highlights on mobile */
+            .annotation-svg {
+                display: none !important;
             }
 
-            /* Keep highlight SVG visible and adjust size */
-            .annotation-svg.highlight {
-                display: block;
-            }
-
+            /* Remove highlight styling on mobile to match desktop look */
             .hl-wrap {
                 white-space: normal;
                 position: relative;
+                background: none;
+                padding: 0;
+                border-radius: 0;
+            }
+
+            .brand-logo {
+                top: 1rem;
+                left: 1rem;
+            }
+
+            .brand-logo img {
+                height: 32px;
             }
         }
 
@@ -1606,10 +1967,631 @@
                 bottom: 14% !important;
             }
         }
+
+        /* Comprehensive Mobile Optimization */
+        @media (max-width: 768px) {
+
+            /* Hero Section */
+            #hero-section {
+                padding: 3rem 1rem !important;
+            }
+
+            #hero-section h1 {
+                font-size: 2rem !important;
+                line-height: 1.2;
+            }
+
+            #hero-section p {
+                font-size: 1rem !important;
+            }
+
+            .cta-button {
+                font-size: 0.95rem;
+                padding: 0.85rem 1.75rem;
+            }
+
+            /* Problem Section */
+            #problem-section .stat-card {
+                margin-bottom: 1.5rem;
+            }
+
+            /* How Twins Operate */
+            .terminal-layout {
+                flex-direction: column !important;
+                gap: 1.5rem !important;
+            }
+
+            .terminal-window,
+            .summary-panel {
+                width: 100% !important;
+                min-height: 300px;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr !important;
+                gap: 1.5rem !important;
+            }
+
+            .feature-card {
+                padding: 1.5rem !important;
+            }
+
+            /* Under the Hood - 3 Column Grid */
+            .uth-grid {
+                grid-template-columns: 1fr !important;
+                gap: 1.5rem !important;
+                height: auto !important;
+            }
+
+            .uth-diagram-col {
+                height: 500px !important;
+                order: 1;
+            }
+
+            .uth-logs-col {
+                height: 300px !important;
+                order: 2;
+            }
+
+            .uth-actions-col {
+                height: 300px !important;
+                order: 3;
+            }
+
+            .uth-logs,
+            .uth-feed {
+                font-size: 0.7rem !important;
+            }
+
+            /* Simulator Section */
+            .sim-container {
+                flex-direction: column !important;
+            }
+
+            .sim-controls {
+                width: 100% !important;
+                flex-direction: row !important;
+                justify-content: flex-start !important;
+                gap: 1rem !important;
+                margin-bottom: 1.5rem;
+                overflow-x: auto !important;
+                overflow-y: hidden !important;
+                -webkit-overflow-scrolling: touch !important;
+                padding-bottom: 0.5rem !important;
+            }
+
+            .role-btn {
+                min-width: 200px !important;
+                flex: 0 0 auto !important;
+                max-width: none !important;
+                padding: 1rem !important;
+            }
+
+            .role-avatar {
+                width: 50px !important;
+                height: 50px !important;
+                font-size: 0.85rem !important;
+            }
+
+            .role-info h4 {
+                font-size: 1rem !important;
+            }
+
+            .role-info span {
+                font-size: 0.85rem !important;
+            }
+
+            .chat-window {
+                width: 100% !important;
+                height: 500px !important;
+            }
+
+            /* Team Section */
+            #team-section {
+                padding: 3rem 0 !important;
+            }
+
+            #team-section img {
+                width: 140px !important;
+                height: 140px !important;
+            }
+
+            /* General Typography */
+            h2 {
+                font-size: 1.75rem !important;
+            }
+
+            h3 {
+                font-size: 1.25rem !important;
+            }
+
+            p {
+                font-size: 0.95rem !important;
+            }
+
+            /* Container Padding */
+            .container {
+                padding-left: 1.5rem !important;
+                padding-right: 1.5rem !important;
+            }
+
+            /* Annotations - Hide on mobile for cleaner look */
+            .annotation-svg {
+                display: none !important;
+            }
+
+            .hand-note {
+                font-size: 1.2rem !important;
+            }
+
+            /* Feature Notes */
+            .feature-note {
+                font-size: 0.85rem !important;
+                padding: 0.5rem 1rem !important;
+            }
+
+            /* Stat Cards */
+            .stat-card {
+                padding: 1.5rem !important;
+            }
+
+            .big-stat {
+                font-size: 2.75rem !important;
+            }
+
+            /* Chat Messages */
+            .chat-msg {
+                font-size: 0.85rem !important;
+                padding: 0.75rem !important;
+            }
+
+            /* Terminal Body */
+            .terminal-body {
+                font-size: 0.8rem !important;
+                padding: 15px !important;
+            }
+
+            /* Summary Panel */
+            .summary-content {
+                font-size: 0.9rem !important;
+            }
+
+            /* Prompt Options - Make more evident on mobile */
+            .prompt-option {
+                font-size: 0.9rem !important;
+                padding: 1rem 1.25rem !important;
+                margin-bottom: 0.75rem !important;
+                font-weight: 600 !important;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+            }
+        }
+
+        /* --- NEW UNDER THE HOOD STYLES --- */
+        .uth-section-new {
+            background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+            overflow: hidden;
+            padding: 6rem 1.5rem;
+        }
+
+        .uth-container-new {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .uth-title-area {
+            text-align: center;
+            margin-bottom: 4rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .uth-title-area h2 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .uth-title-area p {
+            font-size: 1.2rem;
+            color: var(--text-mute);
+        }
+
+        .uth-diagram-container {
+            position: relative;
+            width: 100%;
+            height: 700px;
+            /* Increased height */
+            background: white;
+            border-radius: 24px;
+            box-shadow:
+                0 20px 40px -5px rgba(0, 0, 0, 0.05),
+                0 0 0 1px rgba(0, 0, 0, 0.03);
+            overflow: hidden;
+            display: flex;
+            /* Flex layout */
+            align-items: stretch;
+        }
+
+        #uth-svg-new {
+            position: relative;
+            width: auto;
+            height: auto;
+            flex: 1.5;
+            /* Give more space to diagram */
+            order: 2;
+            z-index: 1;
+        }
+
+        /* Floating Panels - Now Side Columns */
+        .uth-terminal-panel,
+        .uth-action-panel {
+            position: relative;
+            bottom: auto;
+            z-index: 10;
+            width: 300px;
+            /* Slightly wider */
+            background: #f8fafc;
+            /* Distinct background */
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            border: none;
+            border-radius: 0;
+            box-shadow: none;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .uth-terminal-panel {
+            left: auto;
+            order: 1;
+            border-right: 1px solid rgba(0, 0, 0, 0.08);
+            /* Darker border */
+        }
+
+        .uth-action-panel {
+            right: auto;
+            order: 3;
+            border-left: 1px solid rgba(0, 0, 0, 0.08);
+            /* Darker border */
+        }
+
+        .uth-panel-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .uth-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .uth-panel-title {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #475569;
+            letter-spacing: 0.05em;
+        }
+
+        .uth-terminal-content,
+        .uth-action-feed {
+            flex: 1;
+            overflow-y: hidden;
+            padding: 1.5rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            gap: 0.75rem;
+        }
+
+        .uth-log-line {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            /* Larger font */
+            line-height: 1.5;
+            color: #334155;
+            /* Darker text */
+            display: flex;
+            gap: 0.75rem;
+            animation: slideIn 0.3s ease-out forwards;
+        }
+
+        .uth-log-ts {
+            color: #94a3b8;
+            font-size: 0.75rem;
+            flex-shrink: 0;
+        }
+
+        .uth-log-msg {
+            color: #1e293b;
+            /* High contrast */
+        }
+
+        .uth-log-msg.highlight {
+            color: #2563eb;
+            font-weight: 500;
+        }
+
+        .uth-action-card {
+            background: white;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .uth-action-title {
+            display: block;
+            font-weight: 600;
+            font-size: 0.95rem;
+            /* Larger font */
+            color: #0f172a;
+            /* Darker text */
+            margin-bottom: 0.25rem;
+        }
+
+        .uth-action-desc {
+            display: block;
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        /* Pause Button */
+        .uth-pause-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 20;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #475569;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .uth-pause-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+            background: white;
+        }
+
+        .uth-pause-btn svg {
+            width: 14px;
+            height: 14px;
+            fill: currentColor;
+        }
+
+        .uth-tooltip-new {
+            position: absolute;
+            background: rgba(15, 23, 42, 0.9);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            z-index: 20;
+            max-width: 200px;
+            backdrop-filter: blur(4px);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 900px) {
+            .uth-diagram-container {
+                height: auto;
+                flex-direction: column;
+            }
+
+            .uth-svg-wrapper {
+                order: 1 !important;
+                height: 800px !important;
+                flex: none !important;
+                width: 100%;
+            }
+
+            .uth-terminal-panel,
+            .uth-action-panel {
+                position: relative;
+                width: 100%;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                margin-top: 0;
+                border-right: none;
+                border-left: none;
+                border-top: 1px solid rgba(0, 0, 0, 0.08);
+            }
+
+            .uth-terminal-panel {
+                order: 2;
+                height: 250px;
+            }
+
+            .uth-action-panel {
+                order: 3;
+                height: 250px;
+                margin-bottom: 0;
+            }
+
+            .uth-action-panel {
+                order: 3;
+                height: 250px;
+                margin-bottom: 0;
+            }
+
+            /* Team Image Fix for Mobile */
+            .member-img-wrapper {
+                width: 140px !important;
+                height: 140px !important;
+            }
+        }
+
+        /* --- TEAM TWIN TOUCH --- */
+        .member-card {
+            position: relative;
+            text-align: center;
+            cursor: pointer;
+            width: 220px;
+        }
+
+        .member-img-wrapper {
+            position: relative;
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 1.5rem;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid #e2e8f0;
+            background: #f8fafc;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .member-card:hover .member-img-wrapper {
+            border-color: var(--brand-blue);
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.4);
+            transform: scale(1.05);
+        }
+
+        .member-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.3s ease;
+        }
+
+        .member-card:hover .member-img {
+            filter: grayscale(100%) sepia(100%) hue-rotate(190deg) saturate(300%) contrast(1.2);
+            opacity: 0.9;
+            transform: scale(1.1);
+        }
+
+        /* Scanline effect */
+        .member-img-wrapper::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent 50%, rgba(59, 130, 246, 0.2) 50%);
+            background-size: 100% 4px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .member-card:hover .member-img-wrapper::after {
+            opacity: 1;
+        }
+
+        .twin-badge {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: rgba(15, 23, 42, 0.9);
+            color: #60a5fa;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 20px;
+            border: 1px solid rgba(96, 165, 250, 0.3);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            white-space: nowrap;
+            z-index: 10;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .member-card:hover .twin-badge {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .twin-status {
+            height: 0;
+            overflow: hidden;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.75rem;
+            color: var(--brand-blue);
+            margin-top: 0;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .member-card:hover .twin-status {
+            height: 1.5rem;
+            margin-top: 0.5rem;
+            opacity: 1;
+        }
+
+        .member-name {
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+            color: #1e293b;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .member-card:hover .member-name {
+            color: var(--brand-blue);
+        }
     </style>
 </head>
 
 <body>
+
+
 
     <!-- Desktop Navigation -->
     <nav class="desktop-nav">
@@ -1637,7 +2619,13 @@
     <section id="hero-section" style="text-align: center;">
         <div class="container hero-scene">
             <div class="float-wrapper fw-1" data-speed="2">
-                <div class="app-icon"><img src="https://cdn.simpleicons.org/slack/3b82f6" alt="Slack"></div>
+                <div class="app-icon" style="display: flex; align-items: center; justify-content: center;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#3b82f6"
+                        style="width:100%; height:100%">
+                        <path
+                            d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zM6.313 15.165a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zM8.834 6.313a2.528 2.528 0 0 1 2.521 2.521 2.528 2.528 0 0 1-2.521 2.521H2.522A2.528 2.528 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zM18.956 8.834a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zM17.688 8.834a2.528 2.528 0 0 1-2.523 2.521 2.527 2.527 0 0 1-2.52-2.521V2.522A2.527 2.527 0 0 1 15.165 0a2.528 2.528 0 0 1 2.523 2.522v6.312zM15.165 18.956a2.528 2.528 0 0 1 2.523 2.522A2.528 2.528 0 0 1 15.165 24a2.527 2.527 0 0 1-2.52-2.522v-2.522h2.52zM15.165 17.688a2.527 2.527 0 0 1-2.52-2.523 2.526 2.526 0 0 1 2.52-2.52h6.313A2.527 2.527 0 0 1 24 15.165a2.528 2.528 0 0 1-2.522 2.523h-6.313z" />
+                    </svg>
+                </div>
             </div>
             <div class="float-wrapper fw-2" data-speed="-1.5">
                 <div class="app-icon"><img src="https://cdn.simpleicons.org/googlecalendar/3b82f6" alt="Calendar"></div>
@@ -1672,13 +2660,12 @@
                         </svg></span> to handle coordination.</h1>
                 <div class="hand-note" style="top: 10px; right: 5%; transform: rotate(5deg);">Runs 24/7</div>
                 <p class="lead" style="margin-left: auto; margin-right: auto; position: relative;">
-                    Twins manage <span class="hl-wrap">meeting requests, inquiries, and approvals<svg
+                    Twins manage <span class="hl-wrap">meeting requests, inquiries, and approvals,<svg
                             class="annotation-svg highlight" viewBox="0 0 400 60"
                             style="top:3px; left:-5px; width:110%; height:100%;">
                             <path d="M5,40 Q200,10 390,45" />
-                        </svg></span>, cutting delays due to back-and-forth communication so your team can focus on
-                    getting
-                    real work done.
+                        </svg></span>&nbsp;cutting delays due to back-and-forth communication so your team can focus on
+                    getting real work done.
                     <span class="hand-note"
                         style="position: absolute; top: -20px; right: -40px; transform: rotate(10deg); color: var(--brand-blue); font-size: 1.4rem;">It
                         answers for you.</span>
@@ -1700,32 +2687,36 @@
                             </svg></span>
                     </h2>
                     <!-- Two stat boxes side by side -->
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
                         <!-- 57% stat -->
                         <div
-                            style="background: rgba(239, 68, 68, 0.08); padding: 2rem; border-radius: 12px; position: relative;">
-                            <div class="big-stat" style="font-size: 4.5rem; margin-bottom: 0.5rem;">57%</div>
-                            <div style="font-size: 0.95rem; color: #475569; font-weight: 500; line-height: 1.5;">
+                            style="background: rgba(255, 255, 255, 0.5); padding: 2rem; border-radius: 16px; border: 1px solid rgba(0,0,0,0.03);">
+                            <div class="big-stat"
+                                style="font-size: 4.5rem; margin-bottom: 0.5rem; color: var(--brand-dark);">57%</div>
+                            <div style="font-size: 1rem; color: var(--text-mute); font-weight: 500; line-height: 1.5;">
                                 of work time spent on coordination*
                             </div>
-                            <div style="margin-top: 1rem; font-size: 0.7rem; color: #94a3b8;">
+                            <div
+                                style="margin-top: 1rem; font-size: 0.75rem; color: #94a3b8; font-family: 'Fira Code', monospace;">
                                 *Microsoft Work Trend Index, 2024
                             </div>
                         </div>
 
                         <!-- $25k stat -->
                         <div
-                            style="background: rgba(239, 68, 68, 0.08); padding: 2rem; border-radius: 12px; position: relative;">
-                            <div class="big-stat" style="font-size: 4.5rem; margin-bottom: 0.5rem;">$25k</div>
+                            style="background: rgba(255, 255, 255, 0.5); padding: 2rem; border-radius: 16px; border: 1px solid rgba(0,0,0,0.03);">
+                            <div class="big-stat"
+                                style="font-size: 4.5rem; margin-bottom: 0.5rem; color: var(--brand-dark);">$25k</div>
                             <div
-                                style="font-size: 0.95rem; color: #475569; font-weight: 500; line-height: 1.5; position: relative;">
+                                style="font-size: 1rem; color: var(--text-mute); font-weight: 500; line-height: 1.5; position: relative;">
                                 wasted annually on coordination <strong
-                                    style="color: var(--brand-red); font-size: 1.05rem;">per employee</strong>**
+                                    style="color: var(--brand-red); font-weight: 600;">per employee</strong>**
                                 <span class="hand-note red"
-                                    style="position: relative; display: inline-block; margin-left: 8px; transform: rotate(3deg); font-size: 1.3rem; top: 0;">←
+                                    style="position: relative; display: inline-block; margin-left: 8px; transform: rotate(3deg); font-size: 1.3rem; top: 0;">
                                     ouch!</span>
                             </div>
-                            <div style="margin-top: 1rem; font-size: 0.7rem; color: #94a3b8;">
+                            <div
+                                style="margin-top: 1rem; font-size: 0.75rem; color: #94a3b8; font-family: 'Fira Code', monospace;">
                                 **Harvard Business Review, 2023
                             </div>
                         </div>
@@ -1739,17 +2730,17 @@
                             What this means:
                         </p>
                         <p style="font-size: 1.05rem; color: #475569; line-height: 1.8; margin-bottom: 0.8rem;">
-                            → Critical work is <span class="hl-wrap">delayed by manual synchronization<svg
+                            -> Critical work is <span class="hl-wrap">delayed by manual synchronization<svg
                                     class="annotation-svg highlight" viewBox="0 0 400 60"
                                     style="top:3px; left:-5px; width:110%; height:100%;">
                                     <path d="M5,40 Q200,10 390,45" />
                                 </svg></span>
                         </p>
                         <p style="font-size: 1.05rem; color: #475569; line-height: 1.8; margin-bottom: 0.8rem;">
-                            → Context isn't available when you need it (especially across time zones)
+                            -> Context isn't available when you need it (especially across time zones)
                         </p>
                         <p style="font-size: 1.05rem; color: #475569; line-height: 1.8;">
-                            → Teams spend time on admin noise, not creative output
+                            -> Teams spend time on admin noise, not creative output
                         </p>
                     </div>
                     <div class="hand-note"
@@ -1760,101 +2751,6 @@
                         viewBox="0 0 60 60">
                         <path d="M10,10 Q50,30 30,50 L35,45 M30,50 L25,40" />
                     </svg>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="how-it-works" class="twin-section" style="background: rgba(248, 250, 252, 0.8); padding: 3rem 1.5rem;">
-        <div class="container">
-            <div class="reveal">
-                <h2>How Twins Operate</h2>
-                <p style="color: var(--text-mute); margin-bottom: 2rem; font-size: 1rem;">Watch how autonomous Virtual
-                    Twins resolve coordination holdups in real-time.</p>
-
-                <div class="terminal-layout">
-                    <div class="terminal-window">
-                        <div class="terminal-header">
-                            <div class="dot r"></div>
-                            <div class="dot y"></div>
-                            <div class="dot g"></div>
-                        </div>
-                        <div class="terminal-body" id="terminal-output"><span class="cursor"></span></div>
-                    </div>
-                    <div class="summary-panel">
-                        <div class="summary-label">Current Action Result</div>
-                        <div id="summary-text" class="summary-content">Waiting for active protocol...</div>
-                        <svg class="annotation-svg blue-pen"
-                            style="position: absolute; left: -40px; top: 50%; width: 40px; height: 40px;"
-                            viewBox="0 0 40 40">
-                            <path d="M0,20 Q20,20 35,20 L30,15 M35,20 L30,25" />
-                        </svg>
-                    </div>
-                </div>
-
-                <div class="feature-grid">
-                    <div class="feature-note note-1">No more context switching</div>
-                    <div class="feature-note note-2">Syncs instantly -></div>
-                    <div class="feature-note note-3">Automated.</div>
-                    <svg class="grid-arrow arrow-1" viewBox="0 0 100 30" fill="none" stroke="var(--brand-blue)"
-                        stroke-width="2" stroke-dasharray="5,5">
-                        <path d="M0,15 Q50,0 95,15" marker-end="url(#arrowhead)" />
-                    </svg>
-                    <svg class="grid-arrow arrow-2" viewBox="0 0 100 30" fill="none" stroke="var(--brand-blue)"
-                        stroke-width="2" stroke-dasharray="5,5">
-                        <path d="M0,15 Q50,30 95,15" marker-end="url(#arrowhead)" />
-                    </svg>
-                    <svg style="position: absolute; width: 0; height: 0; overflow: hidden;">
-                        <defs>
-                            <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-                                <polygon points="0 0, 10 3.5, 0 7" fill="var(--brand-blue)" />
-                            </marker>
-                        </defs>
-                    </svg>
-
-                    <div class="feature-card">
-                        <svg class="annotation-svg"
-                            style="position: absolute; top: 10px; left: 10px; width: 40px; height: 40px; transform: rotate(-10deg);"
-                            viewBox="0 0 50 50">
-                            <circle cx="25" cy="25" r="20" fill="none" stroke="var(--brand-blue)" stroke-width="2"
-                                stroke-dasharray="60 100" />
-                        </svg>
-                        <h3 class="feature-title">For Makers</h3>
-                        <p class="feature-desc"><strong>The Interceptor:</strong> Auto-answers routine questions using
-                            your docs and history, protecting your flow state.</p>
-                        <div class="hand-note"
-                            style="font-size: 1rem; margin-top: 1.5rem; color: var(--brand-blue); transform: rotate(-2deg); position: relative; display: inline-block;">
-                            "Saved me 2h today"</div>
-                    </div>
-
-                    <div class="feature-card">
-                        <svg class="annotation-svg"
-                            style="position: absolute; bottom: 10px; right: 10px; width: 50px; height: 30px;"
-                            viewBox="0 0 100 60">
-                            <path d="M10,30 Q50,60 90,30" fill="none" stroke="var(--brand-red)" stroke-width="2" />
-                        </svg>
-                        <h3 class="feature-title">For Everyone</h3>
-                        <p class="feature-desc"><strong>The Negotiator:</strong> "Find time for us." Your twin talks to
-                            their twin (or email) to book slots automatically.</p>
-                        <div class="hand-note"
-                            style="font-size: 1rem; margin-top: 1.5rem; color: var(--brand-red); transform: rotate(2deg); position: relative; display: inline-block;">
-                            No more email ping-pong</div>
-                    </div>
-
-                    <div class="feature-card">
-                        <svg class="annotation-svg"
-                            style="position: absolute; top: 20px; right: 20px; width: 30px; height: 30px;"
-                            viewBox="0 0 40 40">
-                            <path d="M10,10 L30,30 M30,10 L10,30" fill="none" stroke="#059669" stroke-width="3"
-                                stroke-linecap="round" />
-                        </svg>
-                        <h3 class="feature-title">For Leaders</h3>
-                        <p class="feature-desc"><strong>The Aggregator:</strong> Ask "What did we ship?" It pulls data
-                            from Github/Linear/Slack to generate an instant report.</p>
-                        <div class="hand-note"
-                            style="font-size: 1rem; margin-top: 1.5rem; color: #059669; transform: rotate(-1deg); position: relative; display: inline-block;">
-                            Instant visibility</div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -1895,7 +2791,37 @@
 
                 <div class="chat-window">
                     <div class="chat-header">
-                        <div class="channel-name" id="channel-title">product-updates</div>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <!-- Slack Logo -->
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M5.5 10.5C5.5 11.8807 4.38071 13 3 13C1.61929 13 0.5 11.8807 0.5 10.5C0.5 9.11929 1.61929 8 3 8H5.5V10.5Z"
+                                    fill="#E01E5A" />
+                                <path
+                                    d="M8 10.5C8 9.11929 9.11929 8 10.5 8C11.8807 8 13 9.11929 13 10.5V13H10.5C9.11929 13 8 11.8807 8 10.5Z"
+                                    fill="#36C5F0" />
+                                <path
+                                    d="M10.5 5.5C9.11929 5.5 8 4.38071 8 3C8 1.61929 9.11929 0.5 10.5 0.5C11.8807 0.5 13 1.61929 13 3V5.5H10.5Z"
+                                    fill="#2EB67D" />
+                                <path
+                                    d="M13.5 3C13.5 1.61929 14.6193 0.5 16 0.5C17.3807 0.5 18.5 1.61929 18.5 3C18.5 4.38071 17.3807 5.5 16 5.5H13.5V3Z"
+                                    fill="#ECB22E" />
+                                <path
+                                    d="M18.5 13.5C18.5 12.1193 19.6193 11 21 11C22.3807 11 23.5 12.1193 23.5 13.5C23.5 14.8807 22.3807 16 21 16H18.5V13.5Z"
+                                    fill="#E01E5A" />
+                                <path
+                                    d="M16 13.5C16 14.8807 14.8807 16 13.5 16C12.1193 16 11 14.8807 11 13.5V11H13.5C14.8807 11 16 12.1193 16 13.5Z"
+                                    fill="#36C5F0" />
+                                <path
+                                    d="M13.5 18.5C14.8807 18.5 16 19.6193 16 21C16 22.3807 14.8807 23.5 13.5 23.5C12.1193 23.5 11 22.3807 11 21V18.5H13.5Z"
+                                    fill="#2EB67D" />
+                                <path
+                                    d="M10.5 21C10.5 22.3807 9.38071 23.5 8 23.5C6.61929 23.5 5.5 22.3807 5.5 21C5.5 19.6193 6.61929 18.5 8 18.5H10.5V21Z"
+                                    fill="#ECB22E" />
+                            </svg>
+                            <div class="channel-name" id="channel-title" style="margin-left: 0;">product-updates</div>
+                        </div>
                         <div id="channel-meta"
                             style="font-size: 0.75rem; color: #94a3b8; font-family: 'Fira Code', monospace;">32 online
                         </div>
@@ -1933,15 +2859,236 @@
         </div>
     </section>
 
-    <section style="min-height: 40vh; border-top: 1px solid #e2e8f0;">
+
+
+    <section id="how-it-works" class="twin-section" style="background: rgba(248, 250, 252, 0.8); padding: 3rem 1.5rem;">
+        <div class="container" style="max-width: 1200px;">
+            <div class="reveal">
+                <h2>How Twins Operate</h2>
+                <p style="color: var(--text-mute); margin-bottom: 2rem; font-size: 1rem;">Watch how autonomous Virtual
+                    Twins resolve coordination holdups in real-time.</p>
+
+                <div class="uth-diagram-container" style="margin-bottom: 4rem;">
+                    <!-- Floating Terminal (Bottom Left) -->
+                    <div class="uth-terminal-panel">
+                        <div class="uth-panel-header">
+                            <div class="uth-dots">
+                                <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+                            </div>
+                            <span class="uth-panel-title">LIVE_LOGS</span>
+                        </div>
+                        <div class="uth-terminal-content" id="uth-terminal-logs">
+                            <!-- Logs injected by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Floating Action Feed (Bottom Right) -->
+                    <div class="uth-action-panel">
+                        <div class="uth-panel-header">
+                            <span class="uth-panel-title">ACTIONS_EMITTED</span>
+                        </div>
+                        <div class="uth-action-feed" id="uth-action-feed">
+                            <!-- Actions injected by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Main SVG Diagram -->
+                    <div class="uth-svg-wrapper" style="position: relative; flex: 1.5; order: 2; height: 100%;">
+                        <button id="uth-pause-btn" class="uth-pause-btn">
+                            <svg id="uth-pause-icon" viewBox="0 0 24 24">
+                                <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
+                            </svg>
+                            <span id="uth-pause-text">PAUSE</span>
+                        </button>
+                        <svg id="uth-svg-new" viewBox="0 0 640 600" preserveAspectRatio="xMidYMid meet">
+                            <defs>
+                                <!-- Glow Filters -->
+                                <filter id="glow-blue-new" x="-50%" y="-50%" width="200%" height="200%">
+                                    <feGaussianBlur stdDeviation="6" result="coloredBlur" />
+                                    <feMerge>
+                                        <feMergeNode in="coloredBlur" />
+                                        <feMergeNode in="SourceGraphic" />
+                                    </feMerge>
+                                </filter>
+                                <filter id="glow-amber-new" x="-50%" y="-50%" width="200%" height="200%">
+                                    <feGaussianBlur stdDeviation="6" result="coloredBlur" />
+                                    <feMerge>
+                                        <feMergeNode in="coloredBlur" />
+                                        <feMergeNode in="SourceGraphic" />
+                                    </feMerge>
+                                </filter>
+                                <filter id="glow-green-new" x="-50%" y="-50%" width="200%" height="200%">
+                                    <feGaussianBlur stdDeviation="6" result="coloredBlur" />
+                                    <feMerge>
+                                        <feMergeNode in="coloredBlur" />
+                                        <feMergeNode in="SourceGraphic" />
+                                    </feMerge>
+                                </filter>
+
+                                <!-- Gradients -->
+                                <linearGradient id="grad-edge" gradientUnits="userSpaceOnUse">
+                                    <stop offset="0%" stop-color="#94a3b8" stop-opacity="0.1" />
+                                    <stop offset="50%" stop-color="#94a3b8" stop-opacity="0.3" />
+                                    <stop offset="100%" stop-color="#94a3b8" stop-opacity="0.1" />
+                                </linearGradient>
+                            </defs>
+
+                            <g id="uth-edges-layer"></g>
+                            <g id="uth-pulses-layer"></g>
+                            <g id="uth-nodes-layer"></g>
+                        </svg>
+
+                        <!-- Tooltip Overlay -->
+                        <div id="uth-tooltip-new" class="uth-tooltip-new"></div>
+                    </div>
+                </div>
+
+                <div class="feature-grid">
+                    <div class="feature-note note-1">No more context switching</div>
+                    <div class="feature-note note-2">Syncs instantly -></div>
+                    <div class="feature-note note-3">Automated.</div>
+                    <svg class="grid-arrow arrow-1" viewBox="0 0 100 30" fill="none" stroke="var(--brand-blue)"
+                        stroke-width="2" stroke-dasharray="5,5">
+                        <path d="M0,15 Q50,0 95,15" marker-end="url(#arrowhead)" />
+                    </svg>
+                    <svg class="grid-arrow arrow-2" viewBox="0 0 100 30" fill="none" stroke="var(--brand-blue)"
+                        stroke-width="2" stroke-dasharray="5,5">
+                        <path d="M0,15 Q50,30 95,15" marker-end="url(#arrowhead)" />
+                    </svg>
+                    <svg style="position: absolute; width: 0; height: 0; overflow: hidden;">
+                        <defs>
+                            <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                <polygon points="0 0, 10 3.5, 0 7" fill="var(--brand-blue)" />
+                            </marker>
+                        </defs>
+                    </svg>
+
+                    <div class="feature-card">
+                        <svg class="annotation-svg"
+                            style="position: absolute; top: 10px; left: 10px; width: 40px; height: 40px; transform: rotate(-10deg);"
+                            viewBox="0 0 50 50">
+                            <circle cx="25" cy="25" r="20" fill="none" stroke="var(--brand-blue)" stroke-width="2"
+                                stroke-dasharray="60 100" />
+                        </svg>
+                        <h3 class="feature-title">For Makers</h3>
+                        <p class="feature-desc"><strong>The Interceptor:</strong> Auto-answers routine questions using
+                            your docs and history, protecting your flow state.</p>
+                        <ul
+                            style="list-style: none; padding: 0; color: var(--text-mute); font-size: 0.9rem; line-height: 1.5; margin-top: 1rem; text-align: left;">
+                            <li style="margin-bottom: 0.5rem;">• Answer routine technical questions</li>
+                            <li style="margin-bottom: 0.5rem;">• Block focus time automatically</li>
+                            <li style="margin-bottom: 0.5rem;">• Intercept non-urgent DMs</li>
+                            <li>• Summarize long threads</li>
+                        </ul>
+                        <div class="hand-note"
+                            style="font-size: 1rem; margin-top: 1.5rem; color: var(--brand-blue); transform: rotate(-2deg); position: relative; display: inline-block;">
+                            "Saved me 2h today"</div>
+                    </div>
+
+                    <div class="feature-card">
+                        <svg class="annotation-svg"
+                            style="position: absolute; bottom: 10px; right: 10px; width: 50px; height: 30px;"
+                            viewBox="0 0 100 60">
+                            <path d="M10,30 Q50,60 90,30" fill="none" stroke="var(--brand-red)" stroke-width="2" />
+                        </svg>
+                        <h3 class="feature-title">For Everyone</h3>
+                        <p class="feature-desc"><strong>The Negotiator:</strong> "Find time for us." Your twin talks to
+                            their twin (or email) to book slots automatically.</p>
+                        <ul
+                            style="list-style: none; padding: 0; color: var(--text-mute); font-size: 0.9rem; line-height: 1.5; margin-top: 1rem; text-align: left;">
+                            <li style="margin-bottom: 0.5rem;">• Schedule meetings instantly</li>
+                            <li style="margin-bottom: 0.5rem;">• Find documents across apps</li>
+                            <li style="margin-bottom: 0.5rem;">• Remind you of follow-ups</li>
+                            <li>• Draft daily standups</li>
+                        </ul>
+                        <div class="hand-note"
+                            style="font-size: 1rem; margin-top: 1.5rem; color: var(--brand-red); transform: rotate(2deg); position: relative; display: inline-block;">
+                            No more email ping-pong</div>
+                    </div>
+
+                    <div class="feature-card">
+                        <svg class="annotation-svg"
+                            style="position: absolute; top: 20px; right: 20px; width: 30px; height: 30px;"
+                            viewBox="0 0 40 40">
+                            <path d="M10,10 L30,30 M30,10 L10,30" fill="none" stroke="#059669" stroke-width="3"
+                                stroke-linecap="round" />
+                        </svg>
+                        <h3 class="feature-title">For Leaders</h3>
+                        <p class="feature-desc"><strong>The Aggregator:</strong> Ask "What did we ship?" It pulls data
+                            from Github/Linear/Slack to generate an instant report.</p>
+                        <ul
+                            style="list-style: none; padding: 0; color: var(--text-mute); font-size: 0.9rem; line-height: 1.5; margin-top: 1rem; text-align: left;">
+                            <li style="margin-bottom: 0.5rem;">• Generate weekly progress reports</li>
+                            <li style="margin-bottom: 0.5rem;">• Track project status</li>
+                            <li style="margin-bottom: 0.5rem;">• Identify bottlenecks</li>
+                            <li>• Onboard new team members</li>
+                        </ul>
+                        <div class="hand-note"
+                            style="font-size: 1rem; margin-top: 1.5rem; color: #059669; transform: rotate(-1deg); position: relative; display: inline-block;">
+                            Instant visibility</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="team-section" style="padding: 4rem 0; background: #f8fafc; border-top: 1px solid #e2e8f0;">
+        <div class="container">
+            <div class="reveal" style="text-align: center; margin-bottom: 3rem;">
+                <div style="display: inline-block; position: relative;">
+                    <h2>Behind the Twins</h2>
+                    <div class="hand-note"
+                        style="position: absolute; top: -25px; right: -90px; transform: rotate(15deg); color: var(--brand-blue); font-size: 1.4rem; width: 100px; line-height: 1.2; opacity: 1;">
+                        tap our picture!
+                    </div>
+                </div>
+            </div>
+            <div class="reveal" style="display: flex; justify-content: center; gap: 4rem; flex-wrap: wrap;">
+                <!-- Member 1 -->
+                <div class="member-card">
+                    <div class="member-img-wrapper">
+                        <img src="assets/sarthak.png" alt="Sarthak Ahuja" class="member-img">
+                        <div class="twin-badge">TWIN ACTIVE</div>
+                    </div>
+                    <h3 class="member-name">Sarthak Ahuja</h3>
+                    <p style="font-size: 0.9rem; color: #64748b;">Computer Science @ UIUC</p>
+                    <div class="twin-status">Twin is shipping code...</div>
+                </div>
+                <!-- Member 2 -->
+                <div class="member-card">
+                    <div class="member-img-wrapper">
+                        <img src="assets/arhan.png" alt="Arhan Singhal" class="member-img">
+                        <div class="twin-badge">TWIN ACTIVE</div>
+                    </div>
+                    <h3 class="member-name">Arhan Singhal</h3>
+                    <p style="font-size: 0.9rem; color: #64748b;">Artificial Intelligence @ Penn</p>
+                    <div class="twin-status">Twin is negotiating...</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="waitlist-section"
+        style="min-height: 40vh; border-top: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: center; background: #fff;">
         <div class="container" style="text-align: center;">
             <div class="reveal">
-                <h2 style="font-size: 2rem;">Stop paying the tax of coordination.</h2>
-                <a href="https://form.typeform.com/to/MqENXj6M" class="cta-button">Express Interest</a>
-                <div style="margin-top: 3rem; font-size: 0.8rem; color: var(--text-mute);">
-                    © 2025 brekfuz.
-                    <div style="margin-top: 0.5rem; font-style: italic; font-size: 0.75rem;">Break the fuss. Clear the
-                        noise.</div>
+                <h2 style="font-size: clamp(2rem, 5vw, 2.5rem); margin-bottom: 2rem; color: var(--brand-dark);">Stop
+                    paying the tax of coordination.</h2>
+                <div style="position: relative; display: inline-block;">
+                    <a href="https://form.typeform.com/to/MqENXj6M" class="cta-button"
+                        style="text-decoration: none;">Join Waitlist</a>
+                    <span class="hand-note cta-note"
+                        style="top: 50%; right: -140px; transform: translateY(-50%) rotate(-5deg);">only takes a
+                        minute</span>
+                </div>
+                <div
+                    style="margin-top: 4rem; font-size: 0.8rem; color: var(--text-mute); display: flex; align-items: center; justify-content: center; gap: 1.5rem; text-align: right;">
+                    <div>
+                        <div>© 2025 brekfuz.</div>
+                        <div style="font-style: italic; font-size: 0.75rem; margin-top: 4px;">Break the fuss. Clear the
+                            noise.</div>
+                    </div>
+                    <img src="assets/logo.png" alt="Logo" style="width: 60px; opacity: 0.8;">
                 </div>
             </div>
         </div>
@@ -1959,106 +3106,52 @@
             });
         });
 
-        // --- TERMINAL LOGIC ---
-        const terminal = document.getElementById('terminal-output');
-        const summaryBox = document.getElementById('summary-text');
-        const scenarios = [
-            {
-                lines: [
-                    { text: "[INTERRUPT] @sarah Can you jump on a quick call?", type: 'log-human' },
-                    { text: "[TWIN] Sarah is in Deep Work (40 min left).", type: 'log-agent' },
-                    { text: "[TWIN] Located pricing doc v4. Shared with requester.", type: 'log-agent' },
-                    { text: "[RESOLVED] Question answered. Call avoided.", type: 'log-success' }
-                ],
-                summary: "Focus Saved: 25 mins.<br><span class='summary-highlight'>Context Switch Prevented.</span>"
-            },
-            {
-                lines: [
-                    { text: "[REQUEST] Marketing needs budget approval by EOD", type: 'log-human' },
-                    { text: "[TWIN] Manager (Alex) is in meetings.", type: 'log-agent' },
-                    { text: "[TWIN] Request within threshold (<$50k). Auto-approved as per Alex's policy.", type: 'log-agent' },
-                    { text: "[RESOLVED] Approval issued. Marketing unblocked. Alex notified async.", type: 'log-success' }
-                ],
-                summary: "Bottleneck Removed.<br><span class='summary-highlight'>Zero Wait Time.</span>"
-            },
-            {
-                lines: [
-                    { text: "[CONFLICT] 3 meeting invites received for same time slot.", type: 'log-human' },
-                    { text: "[TWIN] Detecting priorities. Keeping 'Eng Sync' (Manager present).", type: 'log-agent' },
-                    { text: "[TWIN] Declining others. Sending async updates instead.", type: 'log-agent' },
-                    { text: "[RESOLVED] Calendar conflict resolved automatically.", type: 'log-success' }
-                ],
-                summary: "Calendar Optimized.<br><span class='summary-highlight'>Negotiation Time: 0 mins.</span>"
-            },
-            {
-                lines: [
-                    { text: "[LEADER_ASK] @Twin What did the mobile team ship this week?", type: 'log-human' },
-                    { text: "[TWIN] Aggregating data from Github (PRs) and Linear (Issues)...", type: 'log-agent' },
-                    { text: "[TWIN] Summary: 4 Features, 12 Bugs. Critical hotfix deployed.", type: 'log-agent' },
-                    { text: "[RESOLVED] Update delivered instantly.", type: 'log-success' }
-                ],
-                summary: "Manual Reporting Eliminated.<br><span class='summary-highlight'>Data Source: Mobile Team.</span>"
-            }
-        ];
-        let scenarioIndex = 0;
 
-        async function typeWriter(text, className) {
-            const line = document.createElement('div');
-            line.className = `log-entry`;
-            const time = new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
-            line.innerHTML = `<span class="log-time">[${time}]</span><span class="log-content ${className}"></span>`;
-            terminal.insertBefore(line, document.querySelector('.cursor'));
-            const contentSpan = line.querySelector('.log-content');
-            let i = 0;
-            return new Promise(resolve => {
-                const interval = setInterval(() => {
-                    contentSpan.innerHTML += text.charAt(i); i++;
-                    terminal.scrollTop = terminal.scrollHeight;
-                    if (i >= text.length) { clearInterval(interval); resolve(); }
-                }, 15);
-            });
-        }
-
-        async function runTerminal() {
-            const scenario = scenarios[scenarioIndex];
-            terminal.innerHTML = '<span class="cursor"></span>';
-            summaryBox.classList.remove('show');
-            for (let step of scenario.lines) {
-                await new Promise(r => setTimeout(r, 500));
-                await typeWriter(step.text, step.type);
-            }
-            summaryBox.innerHTML = scenario.summary;
-            summaryBox.classList.add('show');
-            await new Promise(r => setTimeout(r, 4500));
-            scenarioIndex = (scenarioIndex + 1) % scenarios.length;
-            runTerminal();
-        }
-
-        const termObserver = new IntersectionObserver((entries) => {
-            if (entries[0].isIntersecting) { runTerminal(); termObserver.disconnect(); }
-        });
-        termObserver.observe(document.querySelector('.terminal-window'));
 
         // --- BACKGROUND NODES ---
+        // --- BACKGROUND SNOW ---
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         let width, height;
         const resize = () => { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; };
         window.addEventListener('resize', resize); resize();
-        const nodes = [];
-        for (let i = 0; i < 35; i++) nodes.push({ x: Math.random() * width, y: Math.random() * height, vx: (Math.random() - 0.5) * 0.4, vy: (Math.random() - 0.5) * 0.4, size: Math.random() * 2 });
+
+        const flakes = [];
+        const flakeCount = window.innerWidth < 768 ? 30 : 60; // Fewer on mobile
+        for (let i = 0; i < flakeCount; i++) {
+            flakes.push({
+                x: Math.random() * width,
+                y: Math.random() * height,
+                r: Math.random() * 2 + 0.5,
+                vx: (Math.random() - 0.5) * 0.5, // Drift left/right
+                vy: Math.random() * 1 + 0.5,    // Fall down
+                a: Math.random() * 0.4 + 0.1
+            });
+        }
+
         function animateCanvas() {
             ctx.clearRect(0, 0, width, height);
-            ctx.fillStyle = '#2563eb';
-            nodes.forEach(node => {
-                node.x += node.vx; node.y += node.vy;
-                if (node.x < 0 || node.x > width) node.vx *= -1; if (node.y < 0 || node.y > height) node.vy *= -1;
-                ctx.beginPath(); ctx.arc(node.x, node.y, node.size, 0, Math.PI * 2); ctx.globalAlpha = 0.1; ctx.fill();
-                nodes.forEach(other => {
-                    const d = Math.hypot(node.x - other.x, node.y - other.y);
-                    if (d < 120) { ctx.beginPath(); ctx.moveTo(node.x, node.y); ctx.lineTo(other.x, other.y); ctx.strokeStyle = '#2563eb'; ctx.lineWidth = 0.5; ctx.globalAlpha = (120 - d) / 1200; ctx.stroke(); }
-                });
+            ctx.fillStyle = '#94a3b8'; // Cool grey/blue snow
+
+            flakes.forEach(f => {
+                f.x += f.vx;
+                f.y += f.vy;
+
+                // Reset if off bottom
+                if (f.y > height) {
+                    f.y = -10;
+                    f.x = Math.random() * width;
+                }
+                // Wrap left/right
+                if (f.x > width) f.x = 0;
+                if (f.x < 0) f.x = width;
+
+                ctx.beginPath();
+                ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+                ctx.globalAlpha = f.a;
+                ctx.fill();
             });
+
             requestAnimationFrame(animateCanvas);
         }
         animateCanvas();
@@ -2328,6 +3421,555 @@
                 });
             });
         }
+
+        // --- NEW UNDER THE HOOD ENGINE ---
+        (function () {
+            const svg = document.getElementById('uth-svg-new');
+            const nodesLayer = document.getElementById('uth-nodes-layer');
+            const edgesLayer = document.getElementById('uth-edges-layer');
+            const pulsesLayer = document.getElementById('uth-pulses-layer');
+            const terminalLogs = document.getElementById('uth-terminal-logs');
+            const actionFeed = document.getElementById('uth-action-feed');
+            const tooltip = document.getElementById('uth-tooltip-new');
+
+            // Configuration
+            const COLORS = {
+                blue: '#3b82f6',
+                amber: '#f59e0b',
+                yellow: '#fbbf24', // Conflict
+                green: '#10b981',
+                slate: '#64748b'
+            };
+
+            // Node Definitions (Responsive)
+            const isMobile = window.innerWidth <= 768;
+            let nodes = [];
+
+            if (isMobile) {
+                // Vertical Layout for Mobile
+                svg.setAttribute("viewBox", "0 0 400 800");
+                nodes = [
+                    // INPUT LAYER (Top)
+                    { id: 'i1', label: 'SLACK', x: 100, y: 60, type: 'input', color: COLORS.blue },
+                    { id: 'i2', label: 'EMAIL', x: 200, y: 60, type: 'input', color: COLORS.blue },
+                    { id: 'i3', label: 'CAL', x: 300, y: 60, type: 'input', color: COLORS.blue },
+                    { id: 'i4', label: 'DOCS', x: 200, y: 120, type: 'input', color: COLORS.blue },
+
+                    // REASONING LAYER (Middle)
+                    { id: 'r2', label: 'CONTEXT', x: 100, y: 280, type: 'reason', color: COLORS.amber },
+                    { id: 'c1', label: 'CONFLICT', x: 200, y: 360, type: 'conflict', color: COLORS.yellow },
+                    { id: 'r3', label: 'POLICY', x: 300, y: 280, type: 'reason', color: COLORS.amber },
+
+                    { id: 'r4', label: 'PLAN', x: 200, y: 500, type: 'reason', color: COLORS.amber },
+
+                    // ACTION LAYER (Bottom)
+                    { id: 'a1', label: 'REPLY', x: 100, y: 680, type: 'action', color: COLORS.green },
+                    { id: 'a2', label: 'SCHEDULE', x: 200, y: 680, type: 'action', color: COLORS.green },
+                    { id: 'a3', label: 'UPDATE', x: 300, y: 680, type: 'action', color: COLORS.green }
+                ];
+            } else {
+                // Horizontal Layout for Desktop
+                svg.setAttribute("viewBox", "0 0 640 600");
+                nodes = [
+                    // INPUT LAYER (Left)
+                    { id: 'i1', label: 'SLACK', x: 80, y: 150, type: 'input', color: COLORS.blue },
+                    { id: 'i2', label: 'EMAIL', x: 80, y: 300, type: 'input', color: COLORS.blue },
+                    { id: 'i3', label: 'CAL', x: 80, y: 450, type: 'input', color: COLORS.blue },
+                    { id: 'i4', label: 'DOCS', x: 120, y: 540, type: 'input', color: COLORS.blue },
+
+                    // REASONING LAYER (Middle)
+                    { id: 'r2', label: 'CONTEXT', x: 300, y: 150, type: 'reason', color: COLORS.amber },
+                    { id: 'r3', label: 'POLICY', x: 300, y: 450, type: 'reason', color: COLORS.amber },
+                    { id: 'c1', label: 'CONFLICT', x: 300, y: 300, type: 'conflict', color: COLORS.yellow },
+
+                    { id: 'r4', label: 'PLAN', x: 450, y: 300, type: 'reason', color: COLORS.amber },
+
+                    // ACTION LAYER (Right)
+                    { id: 'a1', label: 'REPLY', x: 550, y: 150, type: 'action', color: COLORS.green },
+                    { id: 'a2', label: 'SCHEDULE', x: 550, y: 300, type: 'action', color: COLORS.green },
+                    { id: 'a3', label: 'UPDATE', x: 550, y: 450, type: 'action', color: COLORS.green }
+                ];
+            }
+
+            // Edges (DAG Connections)
+            const connections = [
+                // Inputs -> Middle Layer directly
+                ['i1', 'r2'], ['i1', 'c1'], // Slack -> Context, Conflict
+                ['i2', 'r3'], ['i2', 'c1'], // Email -> Policy, Conflict
+                ['i3', 'c1'], ['i3', 'r2'], // Cal -> Conflict, Context
+                ['i4', 'r2'], ['i4', 'r3'], // Docs -> Context, Policy
+
+                // Middle -> Plan
+                ['r2', 'r4'], ['r3', 'r4'], ['c1', 'r4'],
+
+                // Plan -> Actions
+                ['r4', 'a1'], ['r4', 'a2'], ['r4', 'a3']
+            ];
+
+            const edges = [];
+
+            // Initialize Graph
+            function initGraph() {
+                // Draw Edges
+                connections.forEach(([srcId, tgtId]) => {
+                    const src = nodes.find(n => n.id === srcId);
+                    const tgt = nodes.find(n => n.id === tgtId);
+                    if (src && tgt) {
+                        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                        const d = getBezierPath(src, tgt);
+                        path.setAttribute("d", d);
+                        path.setAttribute("fill", "none");
+                        path.setAttribute("stroke", "url(#grad-edge)");
+                        path.setAttribute("stroke-width", "2");
+                        path.setAttribute("stroke-linecap", "round");
+                        edgesLayer.appendChild(path);
+                        edges.push({ src, tgt, el: path });
+                    }
+                });
+
+                // Draw Nodes
+                nodes.forEach(node => {
+                    const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                    g.setAttribute("class", "uth-node-group");
+                    g.setAttribute("transform", `translate(${node.x}, ${node.y})`);
+                    g.style.cursor = 'pointer';
+
+                    // Hover Events
+                    g.addEventListener('mouseenter', (e) => handleNodeHover(e, node));
+                    g.addEventListener('mouseleave', handleNodeLeave);
+
+                    // Circle
+                    const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                    const r = (node.type === 'reason' || node.type === 'conflict') ? 25 : 18;
+                    circle.setAttribute("r", r);
+                    circle.setAttribute("fill", "white");
+                    circle.setAttribute("stroke", node.color);
+                    circle.setAttribute("stroke-width", "2");
+
+                    // Glow filter
+                    if (node.type === 'input') circle.setAttribute("filter", "url(#glow-blue-new)");
+                    if (node.type === 'reason') circle.setAttribute("filter", "url(#glow-amber-new)");
+                    if (node.type === 'action') circle.setAttribute("filter", "url(#glow-green-new)");
+                    if (node.type === 'conflict') circle.setAttribute("filter", "url(#glow-amber-new)");
+
+                    g.appendChild(circle);
+
+                    // Label
+                    const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                    text.textContent = node.label;
+                    text.setAttribute("dy", r + 18);
+                    text.setAttribute("text-anchor", "middle");
+                    text.setAttribute("fill", "#64748b");
+                    text.setAttribute("font-size", "11");
+                    text.setAttribute("font-weight", "600");
+                    text.setAttribute("font-family", "Inter, sans-serif");
+                    g.appendChild(text);
+
+                    nodesLayer.appendChild(g);
+                    node.el = g; // Store ref
+                });
+            }
+
+            function getBezierPath(src, tgt) {
+                if (isMobile) {
+                    const midY = (src.y + tgt.y) / 2;
+                    return `M ${src.x} ${src.y} C ${src.x} ${midY}, ${tgt.x} ${midY}, ${tgt.x} ${tgt.y}`;
+                } else {
+                    const midX = (src.x + tgt.x) / 2;
+                    return `M ${src.x} ${src.y} C ${midX} ${src.y}, ${midX} ${tgt.y}, ${tgt.x} ${tgt.y}`;
+                }
+            }
+
+            // Scenarios (Ordered Sequence)
+            const scenarios = [
+                // 1. ORIGINAL: Deep Work (Focus)
+                {
+                    input: 'SLACK',
+                    startLog: "Incoming DM: 'Can you jump on a call?'",
+                    steps: {
+                        'r2': "User status: Deep Work (40m remaining)",
+                        'r3': "Locating requested pricing doc v4...",
+                        'r4': "Drafting context-aware response..."
+                    },
+                    action: 'REPLY',
+                    actionLog: "Shared doc. Call avoided. Focus saved."
+                },
+                // 2. ORIGINAL: Budget (Approval)
+                {
+                    input: 'EMAIL',
+                    startLog: "Budget approval request received...",
+                    steps: {
+                        'r2': "Manager (Alex) is in meetings...",
+                        'r3': "Checking approval policy (<$50k)...",
+                        'r4': "Auto-approving request..."
+                    },
+                    action: 'UPDATE',
+                    actionLog: "Approved instantly. Marketing unblocked."
+                },
+                // 3. ORIGINAL: Conflict (Scheduling)
+                {
+                    input: 'CAL',
+                    startLog: "3 conflicting invites detected...",
+                    steps: {
+                        'r2': "Analyzing priorities...",
+                        'c1': "Keeping 'Eng Sync' (Manager present)...",
+                        'r4': "Declining others with updates..."
+                    },
+                    action: 'SCHEDULE',
+                    actionLog: "Conflict resolved. 0 mins spent."
+                },
+                // 4. ORIGINAL: Leader Ask (Reporting)
+                {
+                    input: 'SLACK',
+                    startLog: "Leader Ask: 'What did we ship?'",
+                    steps: {
+                        'r2': "Pulling PRs from Github...",
+                        'r3': "Fetching issues from Linear...",
+                        'r4': "Synthesizing weekly summary..."
+                    },
+                    action: 'UPDATE',
+                    actionLog: "Report delivered instantly."
+                },
+                // 5. NEW: The Interceptor (Answering Questions)
+                {
+                    input: 'SLACK',
+                    startLog: "DM: 'Where is the API key?'",
+                    steps: {
+                        'r2': "Searching internal docs...",
+                        'r3': "Found in 'Engineering Onboarding'...",
+                        'r4': "Drafting reply with link..."
+                    },
+                    action: 'REPLY',
+                    actionLog: "Sent doc link. Question answered."
+                },
+                // 6. NEW: The Librarian (Sending Docs)
+                {
+                    input: 'SLACK',
+                    startLog: "Ask: 'Can you share the Q3 deck?'",
+                    steps: {
+                        'r2': "Searching Drive & Notion...",
+                        'r3': "Locating 'Q3_Strategy_Final.pdf'...",
+                        'r4': "Verifying sharing permissions..."
+                    },
+                    action: 'REPLY',
+                    actionLog: "Document shared. Context provided."
+                },
+                // 7. NEW: The Coordinator (Meeting Prep)
+                {
+                    input: 'CAL',
+                    startLog: "Meeting starting in 10m...",
+                    steps: {
+                        'r2': "Checking meeting agenda...",
+                        'r3': "Finding linked pre-read docs...",
+                        'r4': "Distributing to attendees..."
+                    },
+                    action: 'EMAIL',
+                    actionLog: "Pre-reads sent. Team is ready."
+                },
+                // 8. NEW: The Gatekeeper (Focus)
+                {
+                    input: 'SLACK',
+                    startLog: "Non-urgent @channel mention...",
+                    steps: {
+                        'r2': "Analyzing urgency: Low...",
+                        'c1': "Withholding notification...",
+                        'r4': "Adding to daily summary..."
+                    },
+                    action: 'UPDATE',
+                    actionLog: "Notification batched. Focus saved."
+                }
+            ];
+
+            // Pause Logic
+            let isPaused = false;
+            const pauseBtn = document.getElementById('uth-pause-btn');
+            const pauseText = document.getElementById('uth-pause-text');
+            const pauseIcon = document.getElementById('uth-pause-icon');
+
+            pauseBtn.addEventListener('click', () => {
+                isPaused = !isPaused;
+                if (isPaused) {
+                    pauseText.textContent = "RESUME";
+                    pauseIcon.innerHTML = '<path d="M8 5v14l11-7z"/>'; // Play icon
+                } else {
+                    pauseText.textContent = "PAUSE";
+                    pauseIcon.innerHTML = '<path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>'; // Pause icon
+                }
+            });
+
+            // Distinct Colors for Pulses/Logs
+            const PULSE_COLORS = [
+                '#ef4444', // Red
+                '#f97316', // Orange
+                '#f59e0b', // Amber
+                '#84cc16', // Lime
+                '#10b981', // Emerald
+                '#06b6d4', // Cyan
+                '#3b82f6', // Blue
+                '#8b5cf6', // Violet
+                '#d946ef', // Fuchsia
+                '#f43f5e'  // Rose
+            ];
+
+            // Animation Loop
+            let scenarioIndex = 0;
+
+            function spawnPulse() {
+                if (isPaused) {
+                    setTimeout(spawnPulse, 1000);
+                    return;
+                }
+
+                // Clear logs for single pulse focus
+                terminalLogs.innerHTML = '';
+                actionFeed.innerHTML = '';
+
+                // Pick scenario sequentially
+                const scenario = scenarios[scenarioIndex];
+                scenarioIndex = (scenarioIndex + 1) % scenarios.length;
+
+                // Pick a unique color for this pulse instance
+                const pulseColor = PULSE_COLORS[Math.floor(Math.random() * PULSE_COLORS.length)];
+
+                // Find start node matching scenario input
+                const startNode = nodes.find(n => n.label === scenario.input && n.type === 'input');
+
+                // Trace path: Input -> Middle -> Plan -> Action (Targeted)
+                const pathSequence = findPathToTarget(startNode, scenario.action);
+
+                if (pathSequence.length > 0) {
+                    // Create Pulse (Single Color)
+                    const pulse = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                    pulse.setAttribute("r", 6);
+                    pulse.setAttribute("fill", pulseColor); // Static color
+                    pulse.setAttribute("filter", `drop-shadow(0 0 4px ${pulseColor})`); // Glow
+
+                    pulsesLayer.appendChild(pulse);
+
+                    // Animate along path with scenario context
+                    animateSequence(pulse, pathSequence, 0, scenario, pulseColor);
+
+                    // Log Start Event
+                    logEvent(startNode.label, scenario.startLog, pulseColor);
+                } else {
+                    // Retry if no path found
+                    setTimeout(spawnPulse, 1000);
+                }
+            }
+
+            function findPathToTarget(startNode, targetLabel) {
+                const sequence = [];
+                let current = startNode;
+
+                // Max 3 hops (Input -> Middle -> Plan -> Action)
+                for (let i = 0; i < 3; i++) {
+                    const nextEdges = edges.filter(e => e.src.id === current.id);
+                    if (nextEdges.length === 0) break;
+
+                    let edge;
+                    // If at 'PLAN' node (r4), route to specific target
+                    if (current.id === 'r4') {
+                        edge = nextEdges.find(e => e.tgt.label === targetLabel);
+                    }
+
+                    // Default to random if not at decision point or target not found
+                    if (!edge) {
+                        edge = nextEdges[Math.floor(Math.random() * nextEdges.length)];
+                    }
+
+                    sequence.push(edge);
+                    current = edge.tgt;
+                }
+                return sequence;
+            }
+
+            function animateSequence(el, sequence, index, scenario, color) {
+                if (index >= sequence.length) {
+                    // End of path
+                    el.remove();
+                    // Log Action (Synced with visual arrival)
+                    const finalNode = sequence[sequence.length - 1].tgt;
+                    if (finalNode.type === 'action') {
+                        logAction(scenario.action, scenario.actionLog, color);
+                    }
+
+                    // Wait before starting next pulse (Serial execution)
+                    setTimeout(spawnPulse, 3000);
+                    return;
+                }
+
+                const edge = sequence[index];
+                const duration = 4000; // SLOWED DOWN ALOT (was 2000)
+                const pathLen = edge.el.getTotalLength();
+                let lastTime = null;
+
+                // Log intermediate steps
+                if (index > 0) {
+                    const node = edge.src;
+                    if (node.type === 'reason' || node.type === 'conflict') {
+                        const msg = scenario.steps[node.id] || getLogMessage(node);
+                        logEvent(node.label, msg, color);
+                    }
+                }
+
+                // Re-writing step function for robust pause support
+                let accumulatedTime = 0;
+
+                function stepV2(ts) {
+                    if (!lastTime) lastTime = ts;
+
+                    if (isPaused) {
+                        lastTime = ts;
+                        requestAnimationFrame(stepV2);
+                        return;
+                    }
+
+                    const dt = ts - lastTime;
+                    lastTime = ts;
+                    accumulatedTime += dt;
+
+                    const progress = accumulatedTime / duration;
+
+                    if (progress < 1) {
+                        const pt = edge.el.getPointAtLength(progress * pathLen);
+                        el.setAttribute("cx", pt.x);
+                        el.setAttribute("cy", pt.y);
+                        requestAnimationFrame(stepV2);
+                    } else {
+                        // Trigger node pulse
+                        triggerNodePulse(edge.tgt);
+                        animateSequence(el, sequence, index + 1, scenario, color);
+                    }
+                }
+                requestAnimationFrame(stepV2);
+            }
+
+            function triggerNodePulse(node) {
+                const circle = node.el.querySelector('circle');
+                circle.setAttribute("stroke-width", "4");
+                setTimeout(() => circle.setAttribute("stroke-width", "2"), 200);
+            }
+
+            function getLogMessage(node) {
+                if (node.id === 'r2') return "Simulating user voice & tone...";
+                if (node.id === 'r3') return "Verifying against safety guidelines...";
+                if (node.id === 'c1') return "Resolving scheduling conflict...";
+                if (node.id === 'r4') return "Drafting optimal response...";
+                return "Processing...";
+            }
+
+            function getColorName(hex) {
+                if (hex === COLORS.blue) return 'blue';
+                if (hex === COLORS.amber) return 'amber';
+                if (hex === COLORS.green) return 'green';
+                return 'blue';
+            }
+
+            // Logging
+            function logEvent(source, msg, color) {
+                const div = document.createElement('div');
+                div.className = 'uth-log-line';
+                // Add colored indicator
+                div.style.borderLeft = `3px solid ${color || '#cbd5e1'}`;
+                div.style.paddingLeft = '8px';
+
+                const ts = new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                div.innerHTML = `<span class="uth-log-ts">[${ts}]</span><span class="uth-log-msg">${msg}</span>`;
+                terminalLogs.prepend(div);
+                if (terminalLogs.children.length > 8) terminalLogs.lastElementChild.remove();
+            }
+
+            function logAction(actionLabel, customDesc, color) {
+                const div = document.createElement('div');
+                div.className = 'uth-action-card';
+                // Add colored border
+                div.style.borderLeft = `4px solid ${color || '#10b981'}`;
+
+                const desc = customDesc || getActionDesc(actionLabel);
+                div.innerHTML = `<span class="uth-action-title">${actionLabel}</span><span class="uth-action-desc">${desc}</span>`;
+                actionFeed.prepend(div);
+                if (actionFeed.children.length > 5) actionFeed.lastElementChild.remove();
+            }
+
+            function getActionDesc(label) {
+                if (label === 'REPLY') return "Sent context-aware response";
+                if (label === 'SCHEDULE') return "Booked meeting on calendar";
+                if (label === 'UPDATE') return "Updated project status";
+                return "Task completed successfully";
+            }
+
+            // Hover Logic
+            function handleNodeHover(e, node) {
+                tooltip.style.opacity = 1;
+                tooltip.style.left = (e.pageX + 15) + 'px';
+                tooltip.style.top = (e.pageY - 15) + 'px';
+                tooltip.innerHTML = `<strong>${node.label}</strong><br><span style="color:#94a3b8; font-size:0.75rem">${getNodeDesc(node)}</span>`;
+
+                // Highlight connected edges
+                edges.forEach(edge => {
+                    if (edge.src.id === node.id || edge.tgt.id === node.id) {
+                        edge.el.setAttribute("stroke", node.color);
+                        edge.el.setAttribute("stroke-opacity", "0.8");
+                        edge.el.setAttribute("stroke-width", "3");
+                    } else {
+                        edge.el.setAttribute("stroke-opacity", "0.1");
+                    }
+                });
+            }
+
+            function handleNodeLeave() {
+                tooltip.style.opacity = 0;
+                // Reset edges
+                edges.forEach(edge => {
+                    edge.el.setAttribute("stroke", "url(#grad-edge)");
+                    edge.el.setAttribute("stroke-opacity", "1");
+                    edge.el.setAttribute("stroke-width", "2");
+                });
+            }
+
+            function getNodeDesc(node) {
+                if (node.type === 'input') return "Ingesting real-time signals";
+                if (node.type === 'reason') return "Processing logic & context";
+                if (node.type === 'conflict') return "Detecting & resolving collisions";
+                if (node.type === 'action') return "Executing autonomous task";
+                return "System Node";
+            }
+
+            // Init
+            initGraph();
+            spawnPulse(); // Start the loop immediately (no setInterval)
+
+        })();
+
+        // --- SCROLL SPY NAVIGATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.desktop-nav a, .mobile-nav-menu a');
+
+            function onScroll() {
+                let current = '';
+
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    // Offset for fixed header
+                    if (pageYOffset >= (sectionTop - sectionHeight / 3)) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').includes(current)) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+
+            window.addEventListener('scroll', onScroll);
+            // Initial call
+            onScroll();
+        });
     </script>
 </body>
 
